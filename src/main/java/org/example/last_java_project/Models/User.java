@@ -1,9 +1,7 @@
 package org.example.last_java_project.Models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
@@ -30,6 +28,16 @@ public class User {
     @NotBlank
     @Column(name = "role", nullable = true, length = 45)
     private String role;
+
+    @NotEmpty(message="Password is required!")
+    @Size(min=8, max=128, message="Password must be between 8 and 128 characters")
+    private String password;
+
+    @Transient
+    @NotEmpty(message="Confirm Password is required!")
+    @Size(min=8, max=128, message="Confirm Password must be between 8 and 128 characters")
+    private String confirm;
+
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "created_at", nullable = true)
