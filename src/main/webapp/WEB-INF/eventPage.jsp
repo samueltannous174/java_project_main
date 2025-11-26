@@ -29,18 +29,18 @@
 </header>
 
 <main class="max-w-6xl mx-auto px-4 pb-12">
-    <section class="relative w-full sm:h-[350px] h-[300px] rounded-xl overflow-hidden bg-gray-200">
+    <section class="relative w-full sm:h-[450px] h-[300px] rounded-xl overflow-hidden bg-gray-200">
         <img
-                src="https://www.campagnola.co.uk/wp-content/uploads/2022/07/CAMPAGNOLA_Raccolta-meccanizzata_WEB.jpg"
+                src="${event.image_url}"
                 alt="Volunteers collecting trash on a sandy beach during cleanup"
-                class="w-full h-full object-cover"
+                class="w-full h-full object-fit"
                 loading="lazy"
         />
 
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/40 to-transparent"></div>
 
         <div class="absolute bottom-5 left-5 right-5 sm:right-auto text-white space-y-3">
-            <h2 class="text-2xl sm:text-3xl font-bold leading-tight text-secondary-orange">Olive Harvesting</h2>
+            <h2 class="text-2xl sm:text-3xl font-bold leading-tight text-secondary-orange">${event.title}</h2>
 
             <p class="text-sm sm:text-base w-3/4">
                 Join us for a comprehensive beach cleanup to protect marine life and keep our beaches beautiful. We will
