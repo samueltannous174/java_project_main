@@ -1,5 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -158,42 +160,41 @@
 <%--            </div>--%>
 <%--        </c:forEach>--%>
 
-    <div class="mt-8 flex flex-wrap gap-8">
         <c:forEach var="event" items="${events}">
-            <div class="bg-background-white rounded-2xl shadow-lg border border-primary-purple/10 overflow-hidden flex flex-col flex-none">
+            <div class="bg-background-white rounded-2xl shadow-lg border border-primary-purple/10 overflow-hidden flex flex-col h-full">
                 <div class="relative h-60">
-                    <img src="${event}"
-                         alt="Animal welfare" class="w-full h-full object-cover">
+                    <img src="${event.image_url}"
+                         alt="${event.title}" class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/5 to-transparent"></div>
 
                     <div class="absolute left-4 top-4 flex gap-2">
                     <span class="rounded-full bg-primary-purple px-4 py-1.5 text-sm font-semibold text-white shadow">
-                        ${event.category}
+                            ${event.category}
                     </span>
                     </div>
                 </div>
 
                 <div class="flex-1 px-6 py-5 text-base">
-                    <h3 class="text-xl font-semibold text-primary-purple mb-1">hahahha</h3>
+                    <!-- same height for all titles, full card width -->
+                    <h3 class="text-xl font-semibold text-primary-purple mb-1 min-h-[3rem] leading-snug break-words">
+                            ${event.title}
+                    </h3>
+
                     <p class="text-sm text-primary-purple/60 mb-3">by Alex Johnson</p>
 
                     <div class="space-y-1 text-base text-primary-purple/80">
-                        <p>📅 Nov 12, 2025</p>
-                        <p>📍 Ramallah</p>
-                        <p>👥 1 volunteer joined</p>
-                    </div>
-
-                    <div class="mt-4 text-sm">
-                        <p class="text-primary-purple/70 mb-1">Your matching skills:</p>
-                        <div class="flex flex-wrap gap-1.5">
-                        <span class="inline-flex items-center rounded-full bg-primary-purple/5 px-3 py-1 text-xs font-medium text-primary-purple border border-primary-purple/20">
-                            💬 Communication
-                        </span>
-                        </div>
+                        <p>
+                            📅
+                            <fmt:formatDate value="${event.startDate}" pattern="yyyy-MM-dd" />
+                            -
+                            <fmt:formatDate value="${event.endDate}" pattern="yyyy-MM-dd" />
+                        </p>
+                        <p>${event.city}</p>
+                        <p>👥 ${fn:length(event.users)} volunteer/s joined</p>
                     </div>
                 </div>
 
-                <div class="px-6 pb-5">
+                <div class="px-6 pb-5 mt-auto">
                     <button class="w-full rounded-full bg-primary-purple py-3 text-base font-semibold text-white hover:bg-secondary-orange">
                         View Details →
                     </button>
@@ -201,6 +202,8 @@
             </div>
         </c:forEach>
     </div>
+
+
 
 
 
