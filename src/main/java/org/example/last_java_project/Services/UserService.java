@@ -54,14 +54,14 @@ public class UserService {
     public User login(LoginUser newLoginUser, BindingResult result) {
         Optional<User> potentialUser = userRepository.findByEmail(newLoginUser.getEmail());
         if (!potentialUser.isPresent()) {
-            result.rejectValue("loginEmail", "NotFound", "Invalid email or  password!");
+            result.rejectValue("email", "NotFound", "Invalid email or  password!");
             return null;
         }
 
         User user = potentialUser.get();
 
         if (!BCrypt.checkpw(newLoginUser.getPassword(), user.getPassword())) {
-            result.rejectValue("loginEmail", "Invalid", "Invalid email or  password!");
+            result.rejectValue("email", "Invalid", "Invalid email or  password!");
         }
 
         if (result.hasErrors()) {

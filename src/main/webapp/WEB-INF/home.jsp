@@ -37,11 +37,9 @@
 
 <body class="bg-background-white min-h-screen flex flex-col font-sans">
 
-<!-- NAVBAR -->
 <nav class="bg-background-white shadow-md w-full h-[80px] flex items-center px-4 sm:px-8 flex-shrink-0 border-b border-primary-purple/10">
     <div class="flex justify-between items-center w-full">
 
-        <!-- Logo -->
         <div class="flex items-center">
             <div class="bg-background-white border border-primary-green text-primary-green rounded-xl text-2xl p-2 flex items-center justify-center">
                 <i class="fas fa-leaf"></i>
@@ -51,7 +49,6 @@
             </span>
         </div>
 
-        <!-- Nav links -->
         <div class="hidden sm:flex space-x-8">
             <a href="/home"
                class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-base font-medium">
@@ -61,29 +58,36 @@
                class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-base font-medium">
                 Events
             </a>
-            <a href="/home#"
+            <a href="/profile"
                class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-base font-medium">
                 My Profile
             </a>
         </div>
 
-        <!-- Logout -->
-        <div class="hidden sm:flex">
-            <a href="/logout"
-               class="ml-4 px-4 py-2 text-sm font-medium text-primary-purple/80 bg-background-white border border-primary-purple/20 rounded-md hover:bg-red-500 hover:text-white duration-150 flex items-center">
-                Logout
-            </a>
+        <div class="flex items-center space-x-4">
+
+            <!-- Welcome -->
+            <p class="text-orange-300">
+                Welcome, ${logged.firstname}
+            </p>
+
+            <form action="/logout" method="post" class="hidden sm:flex">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                <button type="submit"
+                        class="px-4 py-2 text-sm font-medium text-primary-purple/80 bg-background-white border border-primary-purple/20 rounded-md hover:bg-red-500 hover:text-white duration-150 flex items-center">
+                    <i class="fas fa-sign-out-alt mr-1"></i> Logout
+                </button>
+            </form>
+
         </div>
+
     </div>
 </nav>
 
-<!-- MAIN SECTION -->
 <div class="flex-1 w-full bg-background-white flex flex-col lg:flex-row overflow-hidden">
 
-    <!-- LEFT SIDE: TEXT -->
     <div class="w-full lg:w-1/2 p-8 sm:p-10 lg:p-14 flex flex-col justify-center space-y-8">
 
-        <!-- Small badge -->
         <div class="inline-flex items-center rounded-full bg-secondary-orange/10 border border-secondary-orange/40 px-3 py-1 w-fit">
             <span class="text-xs font-semibold text-secondary-orange tracking-wide">
                 Welcome to Voluntree

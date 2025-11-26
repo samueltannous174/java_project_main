@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface EventRepository extends CrudRepository<Event,Long> {
+    List<Event> findByDescriptionContains(String description);
 
     List<Event> findByTitleContainsIgnoreCase(String title);
 

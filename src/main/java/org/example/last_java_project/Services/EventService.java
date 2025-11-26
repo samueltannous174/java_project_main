@@ -33,6 +33,10 @@ public class EventService {
     public List<Event> findByTitleContainsIgnoreCase(String title){
         return eventRepository.findByTitleContainsIgnoreCase(title);
     }
+    public Event findById(Long id){
+        return  eventRepository.findById(id).orElse(null);
+    }
+
 
 
 }
