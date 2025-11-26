@@ -27,6 +27,7 @@ public class MainController {
     @GetMapping("/events")
     public String showEvents(Model model) {
         model.addAttribute("events", eventService.findAll());
+
         return "events";
     }
 }
