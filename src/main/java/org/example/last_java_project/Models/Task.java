@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -25,11 +26,11 @@ public class Task {
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "created_at", nullable = true)
-    private Timestamp createdAt;
+    private Date createdAt;
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "updated_at", nullable = true)
-    private Timestamp updatedAt;
+    private Date updatedAt;
 
 
     @ManyToOne
@@ -61,19 +62,19 @@ public class Task {
         this.description = description;
     }
 
-    public Timestamp getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Timestamp getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Timestamp updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 
