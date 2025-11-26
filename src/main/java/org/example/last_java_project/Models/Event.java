@@ -24,7 +24,7 @@ public class Event {
     @Column(name = "category", nullable = true, length = 45)
     private String category;
     @NotBlank
-    @Column(name = "description", nullable = true, length = -1)
+    @Column(name = "description", nullable = true, length = 100)
     private String description;
 
     @NotNull
