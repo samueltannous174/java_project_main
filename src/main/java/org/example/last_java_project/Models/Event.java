@@ -6,11 +6,14 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.*;
 
 @Entity
 @Table(name = "events")
 public class Event {
+
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     @Id
@@ -27,14 +30,19 @@ public class Event {
     @Column(name = "description", nullable = true, length = 100)
     private String description;
 
+    @Column(name = "image_url", nullable = true, length = -1)
+    private String image_url;
+
+
+
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "start_date", nullable = true)
-    private Timestamp startDate;
+    private Date startDate;
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "end_date", nullable = true)
-    private Timestamp endDate;
+    private Date endDate;
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "created_at", nullable = true)
@@ -73,7 +81,30 @@ public class Event {
     private List<ChatMessage> messages = new ArrayList<>();
 
 
+    public Event(String title, String description, String category,
+                 LocalDate startDate, LocalDate endDate, String image_url) {
+
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.category = category;
+        this.image_url=image_url;
+
+        this.startDate = Timestamp.valueOf(startDate.atStartOfDay());
+        this.endDate = Timestamp.valueOf(endDate.atStartOfDay());
+
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
+
+    public Event() {
+    }
+
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+
+
 
 
     public long getId() {
@@ -108,20 +139,28 @@ public class Event {
         this.description = description;
     }
 
-    public Timestamp getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Timestamp startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public Timestamp getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Timestamp endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 
     public Date getCreatedAt() {
