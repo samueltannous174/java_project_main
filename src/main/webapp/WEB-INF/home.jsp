@@ -60,10 +60,18 @@
             </a>
         </div>
 
-        <div class="hidden sm:flex">
-            <a href="/logout" class="ml-4 px-3 py-2 text-sm font-medium text-gray-500 bg-gray-100 rounded-md hover:bg-red-500 hover:text-white duration-150">
-                <i class="fas fa-sign-out-alt mr-1"></i> Logout
-            </a>
+        <div class="flex">
+            <p class="text-orange-300">
+               Welcome, ${logged.firstname}
+            </p>
+            <form class="hidden sm:flex" action="/logout" method="post">
+                <button type="submit">
+                    <a  class="ml-4 px-3 py-2 text-sm font-medium text-gray-500 bg-gray-100 rounded-md hover:bg-red-500 hover:text-white duration-150">
+                        <i class="fas fa-sign-out-alt mr-1"></i> Logout
+                    </a>
+                </button>
+            </form>
+
         </div>
     </div>
 </nav>

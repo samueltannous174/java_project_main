@@ -136,6 +136,20 @@ public class testController {
         return "error404";
     }
 
+    @GetMapping("/")
+    public String showHome(Model model,HttpSession session){
+        Long loggedId = (Long) session.getAttribute("id");
+
+        if (loggedId == null){
+            return "redirect:/show_login";
+        }
+
+        User logged = userService.findUser(loggedId);
+        model.addAttribute("logged",logged);
+
+        return "home";
+    }
+
     @GetMapping("/show_login")
     public String showAuth(
             @ModelAttribute("user") LoginUser user,
@@ -150,11 +164,25 @@ public class testController {
 
         return "login";
     }
+    @GetMapping("/show_register")
+    public String showRegister(
+            @ModelAttribute("newUser") User user,
+            HttpSession session,
+            Model model) {
 
-    @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("newUser") User newUser, BindingResult result, @ModelAttribute("user") LoginUser user2, HttpSession session){
         Long loggedId = (Long) session.getAttribute("id");
 
+        if (loggedId != null) {
+            return "redirect:/";
+        }
+
+        return "register";
+    }
+
+    @PostMapping("/register")
+    public String register(@Valid @ModelAttribute("newUser") User newUser, HttpSession session, BindingResult result){
+        Long loggedId = (Long) session.getAttribute("id");
+        System.out.println(newUser);
         if (loggedId != null) {
             return "redirect:/";
         }
@@ -198,6 +226,7 @@ public class testController {
         }
         return "redirect:/";
     }
+
     @PostMapping("/logout")
     public String logout(HttpSession session){
         if (session != null) {
