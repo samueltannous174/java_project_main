@@ -45,6 +45,44 @@ public class MainController {
         return "home";
     }
 
+    @GetMapping("/events")
+    public String showEvents(Model model,
+                             @RequestParam(value = "search", required = false) String title,
+                             @RequestParam(value = "page", defaultValue = "0") int page) {
+
+        int pageSize = 8;
+
+        List<Event> allEvents;
+        if (title == null || title.isBlank()) {
+            allEvents = eventService.findAll();
+        } else {
+            allEvents = eventService.findByTitleContainsIgnoreCase(title);
+        }
+
+        int totalEvents = allEvents.size();
+        int totalPages = (int) Math.ceil((double) totalEvents / pageSize);
+
+        if (page < 0) page = 0;
+        if (totalPages > 0 && page >= totalPages) page = totalPages - 1;
+
+        int start = page * pageSize;
+        int end = Math.min(start + pageSize, totalEvents);
+        List<Event> eventsPage;
+
+        if (totalEvents == 0) {
+            eventsPage = List.of();
+        } else {
+            eventsPage = allEvents.subList(start, end);
+        }
+
+        model.addAttribute("allEvents", allEvents);
+        model.addAttribute("events", eventsPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("search", title);
+        return "events";
+    }
+
     @GetMapping("/show_login")
     public String showAuth(
             @ModelAttribute("user") LoginUser user,
@@ -134,12 +172,12 @@ public class MainController {
         return "redirect:/";
     }
 
-    @GetMapping("/events")
-    public String showEvents(Model model) {
-        model.addAttribute("events", eventService.findAll());
-
-        return "events";
-    }
+//    @GetMapping("/events")
+//    public String showEvents(Model model) {
+//        model.addAttribute("events", eventService.findAll());
+//
+//        return "events";
+//    }
     @GetMapping("/event/{id}")
     public String showEvent(Model model, @PathVariable("id") Long id) {
         Event event= eventService.findById(id);
