@@ -1,4 +1,4 @@
-package org.example.project_java.Models;
+package org.example.last_java_project.Models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
