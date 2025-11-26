@@ -70,9 +70,7 @@
                     <p class="text-gray-500">Sign in to continue your volunteering journey</p>
                 </div>
 
-                <!-- Sign In Form -->
-                <form:form method="POST" action="${pageContext.request.contextPath}/login" modelAttribute="loginForm">
-                    <!-- Email Address -->
+                <form:form method="POST" action="/loin" modelAttribute="loginForm">
                     <div class="mb-6">
                         <label class="block text-gray-700 font-medium mb-2" for="email">Email Address</label>
                         <div class="relative">
@@ -86,7 +84,6 @@
                         <form:errors path="email" cssClass="text-red-500 text-sm mt-1" />
                     </div>
 
-                    <!-- Password -->
                     <div class="mb-6">
                         <label class="block text-gray-700 font-medium mb-2" for="password">Password</label>
                         <div class="relative">
