@@ -10,9 +10,4 @@ public class testController {
     public String test() {
         return "eventPage";
     }
-
-    @GetMapping("/home")
-    public String home() {
-        return "home";
-    }
 }
