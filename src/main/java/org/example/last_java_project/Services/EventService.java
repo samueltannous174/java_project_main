@@ -26,6 +26,9 @@ public class EventService {
     public void deleteAll( ){
         eventRepository.deleteAll();
     }
+    public List<Event> findAll(){
+        return (List<Event>) eventRepository.findAll();
+    }
 
 
 }
