@@ -30,8 +30,14 @@
         :root {
             --color-primary-green: #00b894;
         }
-        .text-primary-green { color: var(--color-primary-green); }
-        .border-primary-green { border-color: var(--color-primary-green); }
+
+        .text-primary-green {
+            color: var(--color-primary-green);
+        }
+
+        .border-primary-green {
+            border-color: var(--color-primary-green);
+        }
     </style>
 </head>
 <body class="bg-background-white min-h-screen text-primary-purple font-sans">
@@ -46,15 +52,15 @@
 
         <div class="hidden sm:flex space-x-8">
             <a href="/home"
-               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-base font-bold">
+               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-base font-medium">
                 Home
             </a>
             <a href="/events"
-               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-base font-bold">
+               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-base font-medium">
                 Events
             </a>
             <a href="/home#"
-               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-base font-bold">
+               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-base font-medium">
                 My Profile
             </a>
         </div>
@@ -87,8 +93,7 @@
                py-3 pl-11 pr-5 text-lg shadow-sm
                focus:border-primary-purple focus:outline-none focus:ring-1 focus:ring-primary-purple"
                 />
-                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-primary-purple/40 text-xl">🔍</span>
-            </div>
+            </form>
         </div>
 
         <div class="flex w-full lg:w-1/2 gap-4">
@@ -114,19 +119,26 @@
     </div>
 
     <div class="mt-8 grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-        <c:forEach var="event" items="${events}">
-            <div class="bg-background-white rounded-2xl shadow-lg border border-primary-purple/10 overflow-hidden flex flex-col h-full">
-                <div class="relative h-60">
-                    <img src="${event.image_url}"
-                         alt="${event.title}" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/5 to-transparent"></div>
 
-                    <div class="absolute left-4 top-4 flex gap-2">
+        <c:if test="${fn:length(events) == 0}">
+            <p class="mt-8 text-lg text-primary-purple/60">
+                No events yet.
+            </p>
+        </c:if>
+        <c:if test="${fn:length(events) != 0}">
+            <c:forEach var="event" items="${events}">
+                <div class="bg-background-white rounded-2xl shadow-lg border border-primary-purple/10 overflow-hidden flex flex-col h-full">
+                    <div class="relative h-60">
+                        <img src="${event.image_url}"
+                             alt="${event.title}" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/5 to-transparent"></div>
+
+                        <div class="absolute left-4 top-4 flex gap-2">
                     <span class="rounded-full bg-primary-purple px-4 py-1.5 text-sm font-semibold text-white shadow">
                             ${event.category}
                     </span>
+                        </div>
                     </div>
-                </div>
 
                     <div class="flex-1 px-6 py-5 text-base">
                         <h3 class="text-xl font-semibold text-primary-purple mb-1 min-h-[3rem] leading-snug break-words">
@@ -153,14 +165,8 @@
                         </button>
                     </div>
                 </div>
-
-                <div class="px-6 pb-5 mt-auto">
-                    <button class="w-full rounded-full bg-primary-purple py-3 text-base font-semibold text-white hover:bg-secondary-orange">
-                        View Details →
-                    </button>
-                </div>
-            </div>
-        </c:forEach>
+            </c:forEach>
+        </c:if>
     </div>
 
     <div class="flex justify-center mt-10 gap-3">
