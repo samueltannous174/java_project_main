@@ -148,7 +148,7 @@ public class testController {
             return "redirect:/";
         }
 
-        return "login";
+        return "signIn";
     }
 
     @PostMapping("/register")
