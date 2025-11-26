@@ -1,4 +1,4 @@
-package org.example.project_java.Models;
+package org.example.last_java_project.Models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -7,10 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -36,12 +33,12 @@ public class User {
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "created_at", nullable = true)
-    private Timestamp createdAt;
+    private Date createdAt;
 
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "updated_at", nullable = true)
-    private Timestamp updatedAt;
+    private Date updatedAt;
 
     @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Event> createdEvents = new ArrayList<>();
@@ -110,15 +107,15 @@ public class User {
         this.role = role;
     }
 
-    public Timestamp getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Timestamp getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
