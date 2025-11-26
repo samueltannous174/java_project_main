@@ -27,13 +27,14 @@ public class Event {
     @Column(name = "category", nullable = true, length = 45)
     private String category;
     @NotBlank
-    @Column(name = "description", nullable = true, length = -1)
+    @Column(name = "description", nullable = true, length = 100)
     private String description;
 
     @Column(name = "image_url", nullable = true, length = -1)
     private String image_url;
 
-
+    @Column(name = "city", nullable = true, length = -1)
+    private String city;
 
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -65,7 +66,7 @@ public class Event {
             joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set <Event> courses = new HashSet<>();
+    private Set <Event> users = new HashSet<>();
 
 
     @ManyToMany
@@ -161,6 +162,22 @@ public class Event {
 
     public void setImage_url(String image_url) {
         this.image_url = image_url;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public Set<Event> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<Event> users) {
+        this.users = users;
     }
 
     public Date getCreatedAt() {
