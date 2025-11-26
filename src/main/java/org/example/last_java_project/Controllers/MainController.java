@@ -80,6 +80,9 @@ public class MainController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("search", title);
+        return "events";
+    }
+
     @GetMapping("/show_login")
     public String showAuth(
             @ModelAttribute("user") LoginUser user,
@@ -166,12 +169,12 @@ public class MainController {
         return "redirect:/";
     }
 
-    @GetMapping("/events")
-    public String showEvents(Model model) {
-        model.addAttribute("events", eventService.findAll());
-
-        return "events";
-    }
+//    @GetMapping("/events")
+//    public String showEvents(Model model) {
+//        model.addAttribute("events", eventService.findAll());
+//
+//        return "events";
+//    }
     @GetMapping("/event/{id}")
     public String showEvent(Model model, @PathVariable("id") Long id) {
         Event event= eventService.findById(id);
