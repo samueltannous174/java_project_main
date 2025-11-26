@@ -9,9 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class MainController {
@@ -24,10 +26,25 @@ public class MainController {
         return "home";
     }
 
-    @GetMapping("/events")
-    public String showEvents(Model model) {
-        model.addAttribute("events", eventService.findAll());
+//    @GetMapping("/events")
+//    public String showEvents(Model model) {
+//        model.addAttribute("events", eventService.findAll());
+//
+//        return "events";
+//    }
 
+    @GetMapping("/events")
+    public String showEvents(Model model,
+                             @RequestParam(value = "search", required = false)String title) {
+        List<Event> events;
+        if(title ==  null){
+            events = eventService.findAll();
+        }else{
+            events = eventService.findByTitleContainsIgnoreCase(title);
+        }
+        model.addAttribute("events", events);
         return "events";
     }
+
+
 }
