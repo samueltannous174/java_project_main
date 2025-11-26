@@ -2,9 +2,9 @@ package org.example.last_java_project.Controllers;
 
 import org.example.last_java_project.Models.Event;
 import org.example.last_java_project.Models.User;
-import org.example.last_java_project.Repositories.EventRepository;
-import org.example.last_java_project.Services.EventServices;
-import org.springframework.boot.webmvc.autoconfigure.WebMvcProperties;
+
+
+import org.example.last_java_project.Services.EventService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,16 +16,19 @@ import java.util.List;
 @Controller
 
 public class testController {
+
+    private final EventService eventService;
+
+    public testController(EventService eventService) {
+        this.eventService = eventService;
+    }
+
     @GetMapping("/eventPage")
     public String test() {
         return "eventPage";
     }
 
-    private final EventServices eventServices;
 
-    public testController(EventServices eventServices) {
-        this.eventServices = eventServices;
-    }
 
     @GetMapping("/add")
 
@@ -115,8 +118,8 @@ public class testController {
                 )
         );
 
-        eventServices.deleteAll();
-        eventServices.saveALl(events);
+        eventService.deleteAll();
+        eventService.saveALl(events);
         return "login";
     }
     @GetMapping("/show_login")
