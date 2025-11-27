@@ -38,7 +38,7 @@ public class MainController {
         Long loggedId = (Long) session.getAttribute("id");
 
         if (loggedId == null){
-            return "redirect:/show_login";
+            return "redirect:/login";
         }
 
         User logged = userService.findUser(loggedId);
@@ -285,10 +285,6 @@ public class MainController {
 
         return "redirect:/events";
     }
-
-
-
-
 
     @GetMapping("/profile/{id}")
     public String profile(@PathVariable("id")Long id,
