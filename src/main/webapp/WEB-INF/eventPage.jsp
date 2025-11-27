@@ -24,6 +24,40 @@
     </script>
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased font-sans">
+
+<nav class="bg-background-white shadow-md w-full h-[80px] flex items-center px-4 sm:px-8 flex-shrink-0 border-b border-primary-purple/10 sticky top-0 z-50">
+    <div class="flex justify-between items-center w-full">
+        <div class="flex items-center">
+            <span class="ml-3 text-2xl font-extrabold text-primary-purple tracking-tight">
+                Voluntree
+            </span>
+        </div>
+
+        <div class="hidden sm:flex space-x-8">
+            <a href="/"
+               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-base font-medium">
+                Home
+            </a>
+            <a href="/events"
+               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-base font-medium">
+                Events
+            </a>
+            <a href="/home#"
+               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-base font-medium">
+                My Profile
+            </a>
+        </div>
+
+        <div class="hidden sm:flex">
+            <a href="/logout"
+               class="ml-4 px-4 py-2 text-sm font-medium text-primary-purple/80 bg-background-white border border-primary-purple/20 rounded-md hover:bg-red-500 hover:text-white duration-150 flex items-center">
+                Logout
+            </a>
+        </div>
+    </div>
+</nav>
+
+
 <header class="max-w-6xl mx-auto px-4 py-6">
     <h1 class="text-3xl font-extrabold text-primary-purple">Event Page</h1>
 </header>
