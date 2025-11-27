@@ -42,6 +42,12 @@ public class EventService {
     }
 
 
+    public List<String> getUniqueCategories(){
+        return eventRepository.getAllCategories();
+    }
 
+    public List<Event> getEventsByCategory(String category){
+        return eventRepository.getEventsByCategory(category);
+    }
 
 }

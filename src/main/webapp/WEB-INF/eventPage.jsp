@@ -26,11 +26,44 @@
 
 <body class="bg-slate-50 text-slate-900 antialiased font-sans">
 
+<nav class="bg-background-white shadow-md w-full h-[80px] flex items-center px-4 sm:px-8 flex-shrink-0 border-b border-primary-purple/10 sticky top-0 z-50">
+    <div class="flex justify-between items-center w-full">
+        <div class="flex items-center">
+            <span class="ml-3 text-2xl font-extrabold text-primary-purple tracking-tight">
+                Voluntree
+            </span>
+        </div>
+
+        <div class="hidden sm:flex space-x-8">
+            <a href="/"
+               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-base font-medium">
+                Home
+            </a>
+            <a href="/events"
+               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-base font-medium">
+                Events
+            </a>
+            <a href="/home#"
+               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-base font-medium">
+                My Profile
+            </a>
+        </div>
+
+        <div class="hidden sm:flex">
+            <a href="/logout"
+               class="ml-4 px-4 py-2 text-sm font-medium text-primary-purple/80 bg-background-white border border-primary-purple/20 rounded-md hover:bg-red-500 hover:text-white duration-150 flex items-center">
+                Logout
+            </a>
+        </div>
+    </div>
+</nav>
+
+
 <header class="max-w-6xl mx-auto px-4 py-6">
     <h1 class="text-4xl font-extrabold text-primary-purple">${event.title}</h1>
-    <h1 class="text-4xl font-extrabold text-primary-purple">${desc}</h1>
 </header>
 
+<!-- Main -->
 <main class="max-w-6xl mx-auto px-4 pb-12">
 
     <!-- Hero section -->
@@ -42,9 +75,11 @@
                 loading="lazy"
         />
 
+        <!-- Gradient overlay -->
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/40 to-transparent"></div>
 
-        <div class="absolute bottom-5 left-5 right-5 text-orange-200 space-y-3">
+        <!-- Text overlay -->
+        <div class="absolute bottom-5 left-5 right-5 text-white space-y-3">
             <p class="text-sm sm:text-base max-w-xl">
                 ${event.description}
             </p>
@@ -54,7 +89,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2v-5H3v5a2 2 0 002 2z"/>
                 </svg>
-                <span class="text-orange-200">${event.startDate}</span>
+                <span>${event.startDate}</span>
             </div>
         </div>
     </section>
@@ -88,6 +123,7 @@
                 </ul>
             </div>
 
+            <!-- Tasks -->
             <div class="bg-background-white p-6 rounded-xl shadow border">
                 <h2 class="text-lg font-semibold flex items-center space-x-2 mb-4 text-primary-purple">
                     <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -155,8 +191,6 @@
 
         </div>
     </div>
-
 </main>
-
 </body>
 </html>

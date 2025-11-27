@@ -51,7 +51,7 @@
         </div>
 
         <div class="hidden sm:flex space-x-8">
-            <a href="/home"
+            <a href="/"
                class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-base font-medium">
                 Home
             </a>
@@ -97,9 +97,11 @@
         </div>
 
         <div class="flex w-full lg:w-1/2 gap-4">
-            <select class="w-1/3 rounded-full border border-primary-purple/20 bg-background-white px-4 py-2.5 text-sm shadow-sm focus:border-primary-purple focus:outline-none focus:ring-1 focus:ring-primary-purple">
-                <c:forEach var="event" items="${allEvents}">
-                    <option>${event.category}</option>
+            <select class="w-1/3 rounded-full border border-primary-purple/20 bg-background-white px-4 py-2.5 text-sm shadow-sm focus:border-primary-purple focus:outline-none focus:ring-1 focus:ring-primary-purple"
+                    onchange="if (this.value) window.location.href = '/events?category='+encodeURIComponent(this.value);">\
+                <option disabled selected>Category</option>
+                <c:forEach var="category" items="${categories}">
+                    <option >${category}</option>
                 </c:forEach>
             </select>
 
@@ -160,7 +162,8 @@
                     </div>
 
                     <div class="px-6 pb-5 mt-auto">
-                        <a href="/event/${event.id}" class="w-full rounded-full px-3  bg-primary-purple py-3 text-base font-semibold text-white hover:bg-secondary-orange">
+                        <a href="/event/${event.id}"
+                           class="w-full block text-center rounded-full bg-primary-purple py-3 text-base font-semibold text-white hover:bg-secondary-orange">
                             View Details
                         </a>
                     </div>

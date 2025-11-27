@@ -13,4 +13,8 @@ public interface EventRepository extends CrudRepository<Event,Long> {
 
     List<Event> findByTitleContainsIgnoreCase(String title);
 
+    @Query("SELECT DISTINCT d.category FROM Event d")
+    List<String> getAllCategories();
+
+    List<Event> getEventsByCategory(String category);
 }
