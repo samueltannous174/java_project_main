@@ -86,11 +86,9 @@
     </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Navigation Bar  -->
     <nav class="bg-white shadow-sm border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
-                <!-- Logo -->
                 <div class="flex items-center gap-3">
                     <div class="bg-primary-purple p-2 rounded-lg">
                         <i class="fas fa-users text-white text-xl"></i>
@@ -100,7 +98,6 @@
                     </div>
                 </div>
                 
-                <!-- User Menu -->
                 <div class="flex items-center gap-4">
                     <span class="text-gray-600">Welcome, <strong>${user.fullName}</strong></span>
                     <a href="${pageContext.request.contextPath}/auth/logout" 
@@ -112,9 +109,7 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
     <div class="max-w-5xl mx-auto px-4 py-8">
-        <!-- Page Header -->
         <div class="bg-white rounded-2xl shadow-sm p-6 mb-6">
             <div class="flex items-center gap-3">
                 <div class="bg-purple-50 p-3 rounded-xl">
@@ -127,12 +122,9 @@
             </div>
         </div>
 
-        <!-- Chat Container -->
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-            <!-- Tabs -->
             <div class="border-b border-gray-200">
                 <div class="flex">
-                    <!-- Participant Chat Tab -->
                     <button onclick="switchTab('participant')" 
                             id="participantTab"
                             class="flex-1 px-6 py-4 text-center font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 transition-colors border-b-2 border-transparent">
@@ -140,7 +132,6 @@
                         Participant Chat
                     </button>
                     
-                    <!-- AI Assistant Tab -->
                     <button onclick="switchTab('ai')" 
                             id="aiTab"
                             class="flex-1 px-6 py-4 text-center font-medium text-primary-purple bg-gray-50 transition-colors border-b-2 border-primary-purple">
@@ -150,22 +141,17 @@
                 </div>
             </div>
 
-            <!-- Chat Content Area -->
             <div class="chat-container flex flex-col">
-                <!-- Messages Area -->
                 <div id="messagesContainer" 
                     class="flex-1 overflow-y-auto p-6 space-y-4 scroll-smooth bg-gray-50">
                     
-                    <!-- Welcome Message -->
                     <div class="chat-message flex items-start gap-3">
-                        <!-- AI Avatar -->
                         <div class="flex-shrink-0">
                             <div class="w-10 h-10 bg-gradient-to-br from-primary-purple to-purple-900 rounded-full flex items-center justify-center shadow-lg">
                                 <i class="fas fa-robot text-white"></i>
                             </div>
                         </div>
                         
-                        <!-- Message Content -->
                         <div class="flex-1">
                             <div class="flex items-center gap-2 mb-1">
                                 <span class="font-semibold text-gray-800">AI Assistant</span>
@@ -203,7 +189,6 @@
 
                 </div>
 
-                <!-- Typing Indicator (hidden by default) -->
                 <div id="typingIndicator" class="px-6 py-2 hidden">
                     <div class="flex items-start gap-3">
                         <div class="flex-shrink-0">
@@ -221,7 +206,6 @@
                     </div>
                 </div>
 
-                <!-- Input Area -->
                 <div class="border-t border-gray-200 bg-white p-4">
                     <form id="chatForm" onsubmit="sendMessage(event)" class="flex gap-3">
                         <input 
@@ -239,7 +223,6 @@
                         </button>
                     </form>
                     
-                    <!-- Quick Actions  -->
                     <div class="mt-3 flex flex-wrap gap-2">
                         <button onclick="quickQuestion('What time does the event start?')" 
                                 class="text-xs px-3 py-1.5 bg-purple-50 hover:bg-purple-100 text-primary-purple rounded-full transition-colors border border-purple-200">
@@ -258,7 +241,6 @@
             </div>
         </div>
 
-        <!-- Event Info Card -->
         <div class="mt-6 bg-white rounded-2xl shadow-sm p-6">
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Event Information</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
