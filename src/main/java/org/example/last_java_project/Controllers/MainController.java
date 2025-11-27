@@ -307,4 +307,14 @@ public class MainController {
         return "profile";
     }
 
+    @GetMapping("chat")
+    public String chatAi(HttpSession session,
+                         Model model){
+        Long loggedId = (Long) session.getAttribute("id");
+        if (loggedId == null) {
+            return "redirect:/";
+        }
+        return "chatAI";
+    }
+
 }
