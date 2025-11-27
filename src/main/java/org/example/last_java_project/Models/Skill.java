@@ -38,18 +38,31 @@ public class Skill {
     )
     Set <User> users= new HashSet<>();
 
+    @ManyToMany(mappedBy = "skills")
+    private Set<Event> events = new HashSet<>();
 
 
-    @ManyToMany
-    @JoinTable(
-            name = "events_skills",
-            joinColumns = @JoinColumn(name = "skill_id"),
-            inverseJoinColumns = @JoinColumn(name = "event_id")
-    )
-    Set <Event> events= new HashSet<>();
+    public Skill() {
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
 
+    @PrePersist
+    protected void onCreate(){
+        this.createdAt = new Date();
+    }
+    @PreUpdate
+    protected void onUpdate(){
+        this.updatedAt = new Date();
+    }
 
+    public Set<Event> getEvents() {
+        return events;
+    }
 
+    public void setEvents(Set<Event> events) {
+        this.events = events;
+    }
 
     public long getId() {
         return id;
@@ -59,7 +72,7 @@ public class Skill {
         this.id = id;
     }
 
-    public String getName() {
+    public String  getName() {
         return name;
     }
 

@@ -1,9 +1,7 @@
 package org.example.last_java_project.Models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
@@ -12,6 +10,23 @@ import java.util.*;
 @Entity
 @Table(name = "users")
 public class User {
+
+    public User(String firstname, String lastname, String email, String role) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.role = role;
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
+
+
+    public User() {
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+
+    }
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
@@ -30,14 +45,20 @@ public class User {
     @NotBlank
     @Column(name = "role", nullable = true, length = 45)
     private String role;
-    @NotNull
+
+    @NotEmpty(message="Password is required!")
+    @Size(min=8, max=128, message="Password must be between 8 and 128 characters")
+    private String password;
+
+    @Transient
+    @NotBlank (message="Confirm Password is required!")
+    @Size(min=8, max=128, message="Confirm Password must be between 8 and 128 characters")
+    private String confirm;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Column(name = "created_at", nullable = true)
     private Date createdAt;
 
-    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Column(name = "updated_at", nullable = true)
     private Date updatedAt;
 
     @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -107,20 +128,31 @@ public class User {
         this.role = role;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+
+
+    public String getPassword() {
+        return password;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public Date getUpdatedAt() {
-        return updatedAt;
+    public String getConfirm() {
+        return confirm;
     }
 
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setConfirm(String confirm) {
+        this.confirm = confirm;
+    }
+
+    @PrePersist
+    protected void onCreate(){
+        this.createdAt = new Date();
+    }
+    @PreUpdate
+    protected void onUpdate(){
+        this.updatedAt = new Date();
     }
 
     @Override

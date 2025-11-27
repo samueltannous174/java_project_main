@@ -6,11 +6,14 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.*;
 
 @Entity
 @Table(name = "events")
 public class Event {
+
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     @Id
@@ -24,17 +27,23 @@ public class Event {
     @Column(name = "category", nullable = true, length = 45)
     private String category;
     @NotBlank
-    @Column(name = "description", nullable = true, length = -1)
+    @Column(name = "description", nullable = true, length = 100)
     private String description;
+
+    @Column(name = "image_url", nullable = true, length = -1)
+    private String image_url;
+
+    @Column(name = "city", nullable = true, length = -1)
+    private String city;
 
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "start_date", nullable = true)
-    private Timestamp startDate;
+    private Date startDate;
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "end_date", nullable = true)
-    private Timestamp endDate;
+    private Date endDate;
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "created_at", nullable = true)
@@ -57,10 +66,10 @@ public class Event {
             joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set <Event> courses = new HashSet<>();
+    private Set <User> users = new HashSet<>();
 
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "events_skills",
             joinColumns = @JoinColumn(name = "event_id"),
@@ -71,6 +80,28 @@ public class Event {
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ChatMessage> messages = new ArrayList<>();
+
+
+    public Event(String title, String description, String category,
+                 LocalDate startDate, LocalDate endDate, String image_url) {
+
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.category = category;
+        this.image_url=image_url;
+
+        this.startDate = Timestamp.valueOf(startDate.atStartOfDay());
+        this.endDate = Timestamp.valueOf(endDate.atStartOfDay());
+
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
+
+    public Event() {
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
 
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -108,20 +139,44 @@ public class Event {
         this.description = description;
     }
 
-    public Timestamp getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Timestamp startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public Timestamp getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Timestamp endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 
     public Date getCreatedAt() {
@@ -139,6 +194,33 @@ public class Event {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public Set<Skill> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(Set<Skill> skills) {
+        this.skills = skills;
+    }
+
+    @PrePersist
+    protected void onCreate(){
+        this.createdAt = new Date();
+    }
+    @PreUpdate
+    protected void onUpdate(){
+        this.updatedAt = new Date();
+    }
+
+
 
     @Override
     public String toString() {
