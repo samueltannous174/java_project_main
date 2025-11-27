@@ -110,8 +110,11 @@ public class MainController {
             return "redirect:/";
         }
 
+
+
         return "register";
     }
+
 
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute("newUser") User newUser, HttpSession session, BindingResult result){
