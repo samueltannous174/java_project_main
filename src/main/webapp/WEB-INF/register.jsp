@@ -66,6 +66,12 @@
                         class="w-full px-4 py-3 bg-gray-50 border-none rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-purple"/>
             <form:errors path="email" cssClass="text-red-500 text-sm mt-1"/>
         </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 font-medium mb-2" for="image_url">image_url</label>
+            <form:input path="image_url" id="image_url" type="image_url"
+                        class="w-full px-4 py-3 bg-gray-50 border-none rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-purple"/>
+            <form:errors path="image_url" cssClass="text-red-500 text-sm mt-1"/>
+        </div>
 
         <div class="mb-4 relative">
             <label class="block text-gray-700 font-medium mb-2" for="password">Password</label>
@@ -100,6 +106,16 @@
             <form:errors path="role" cssClass="text-red-500 text-sm mt-1"/>
         </div>
 
+        <div class="mb-6">
+            <label class="block text-gray-700 font-medium mb-2">Your Skills </label>
+            <c:forEach items="${allSkills}" var="skill">
+                <div class="flex items-center mb-2">
+                    <form:checkbox path="skills" value="${skill.id}" id="skill_${skill.id}" />
+                    <label for="skill_${skill.id}" class="ml-2 text-gray-700">${skill.name}</label>
+                </div>
+            </c:forEach>
+        </div>
+
         <button type="submit"
                 class="w-full bg-primary-purple hover:bg-secondary-orange text-white font-semibold py-3 rounded-xl transition-all transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary-purple focus:ring-offset-2">
             Register
@@ -117,6 +133,15 @@
             </div>
         </c:if>
     </form:form>
+
+    <div class="mb-6">
+        <label class="block text-gray-700 font-medium mb-2">Skills Needed</label>
+
+
+    </div>
+
+
+
 
     <p class="text-center text-gray-600 mt-6">
         Already have an account?

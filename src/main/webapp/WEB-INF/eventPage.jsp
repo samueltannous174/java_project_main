@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
@@ -63,10 +64,8 @@
     <h1 class="text-4xl font-extrabold text-primary-purple">${event.title}</h1>
 </header>
 
-<!-- Main -->
 <main class="max-w-6xl mx-auto px-4 pb-12">
 
-    <!-- Hero section -->
     <section class="relative w-full sm:h-[400px] h-[300px] rounded-xl overflow-hidden bg-gray-200 shadow">
         <img
                 src="${event.image_url}"
@@ -75,10 +74,8 @@
                 loading="lazy"
         />
 
-        <!-- Gradient overlay -->
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/40 to-transparent"></div>
 
-        <!-- Text overlay -->
         <div class="absolute bottom-5 left-5 right-5 text-white space-y-3">
             <p class="text-sm sm:text-base max-w-xl">
                 ${event.description}
@@ -108,22 +105,15 @@
                 </h2>
 
                 <ul class="space-y-2">
-                    <li class="flex items-center space-x-2">
-                        <span class="text-green-600">✔</span>
-                        <span>Remove 500kg of trash</span>
-                    </li>
-                    <li class="flex items-center space-x-2">
-                        <span class="text-green-600">✔</span>
-                        <span>Protect marine ecosystems</span>
-                    </li>
-                    <li class="flex items-center space-x-2">
-                        <span class="text-green-600">✔</span>
-                        <span>Raise environmental awareness</span>
-                    </li>
+                    <c:forEach var="outcome" items="${outcomes}">
+                        <li class="flex items-center space-x-2">
+                            <span class="text-green-600">✔</span>
+                            <span> ${outcome.description}</span>
+                        </li>
+                    </c:forEach>
                 </ul>
             </div>
 
-            <!-- Tasks -->
             <div class="bg-background-white p-6 rounded-xl shadow border">
                 <h2 class="text-lg font-semibold flex items-center space-x-2 mb-4 text-primary-purple">
                     <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -134,22 +124,12 @@
                 </h2>
 
                 <ol class="space-y-3">
-                    <li class="flex items-center space-x-2">
-                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full font-semibold text-sm">1</span>
-                        <span>Collect trash and debris</span>
-                    </li>
-                    <li class="flex items-center space-x-2">
-                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full font-semibold text-sm">2</span>
-                        <span>Sort recyclables</span>
-                    </li>
-                    <li class="flex items-center space-x-2">
-                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full font-semibold text-sm">3</span>
-                        <span>Document findings</span>
-                    </li>
-                    <li class="flex items-center space-x-2">
-                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full font-semibold text-sm">4</span>
-                        <span>Educate beachgoers</span>
-                    </li>
+                        <c:forEach var="task" items="${tasks}">
+                            <li class="flex items-center space-x-2">
+                                <span class="text-green-600">✔</span>
+                                <span> ${task.name}</span>
+                            </li>
+                        </c:forEach>
                 </ol>
             </div>
 

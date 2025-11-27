@@ -58,6 +58,9 @@ public class User {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createdAt;
 
+    @Column(name = "image_url", nullable = true, length = -1)
+    private String image_url;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updatedAt;
 
@@ -129,6 +132,13 @@ public class User {
     }
 
 
+    public Set<Skill> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(Set<Skill> skills) {
+        this.skills = skills;
+    }
 
     public String getPassword() {
         return password;
@@ -144,6 +154,14 @@ public class User {
 
     public void setConfirm(String confirm) {
         this.confirm = confirm;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 
     @PrePersist

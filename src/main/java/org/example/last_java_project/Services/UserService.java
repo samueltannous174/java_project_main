@@ -19,6 +19,10 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+
+    public void save(User user){
+        userRepository.save(user);
+    }
     public User register(User newUser, BindingResult result) {
 
         System.out.println(newUser);

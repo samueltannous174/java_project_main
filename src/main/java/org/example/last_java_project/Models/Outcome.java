@@ -1,25 +1,27 @@
 package org.example.last_java_project.Models;
 
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
-@Table(name = "skills")
-public class Skill {
+@Table(name = "outcomes")
+public class Outcome {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
     private long id;
+
     @NotBlank
-    @Column(name = "name", nullable = true, length = 45)
-    private String name;
+    @Column(name = "description", nullable = true, length = -1)
+    private String description;
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "created_at", nullable = true)
@@ -29,30 +31,15 @@ public class Skill {
     @Column(name = "updated_at", nullable = true)
     private Date updatedAt;
 
-
-    @ManyToMany
-    @JoinTable(
-            name = "skills_users",
-            joinColumns = @JoinColumn(name = "skill_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    Set <User> users= new HashSet<>();
-
-    @ManyToMany(mappedBy = "skills")
-    private Set<Event> events = new HashSet<>();
-
-
-    public Skill() {
+    public Outcome() {
         this.createdAt = new Date();
         this.updatedAt = new Date();
     }
 
-    public Skill(String name) {
-        this.name = name;
-        this.createdAt = new Date();
-        this.updatedAt = new Date();
 
-    }
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    private Event event;
 
     @PrePersist
     protected void onCreate(){
@@ -63,13 +50,6 @@ public class Skill {
         this.updatedAt = new Date();
     }
 
-    public Set<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(Set<Event> events) {
-        this.events = events;
-    }
 
     public long getId() {
         return id;
@@ -79,15 +59,13 @@ public class Skill {
         this.id = id;
     }
 
-    public String  getName() {
-        return name;
+    public String getDescription() {
+        return description;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDescription(String description) {
+        this.description = description;
     }
-
-
 
     public Date getCreatedAt() {
         return createdAt;
@@ -105,15 +83,11 @@ public class Skill {
         this.updatedAt = updatedAt;
     }
 
-    @Override
-    public String toString() {
-        return "Skill{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", users=" + users +
-                ", events=" + events +
-                '}';
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
     }
 }
