@@ -239,7 +239,7 @@
                         </button>
                     </form>
                     
-                    <!-- Quick Actions (Optional) -->
+                    <!-- Quick Actions  -->
                     <div class="mt-3 flex flex-wrap gap-2">
                         <button onclick="quickQuestion('What time does the event start?')" 
                                 class="text-xs px-3 py-1.5 bg-purple-50 hover:bg-purple-100 text-primary-purple rounded-full transition-colors border border-purple-200">
@@ -258,7 +258,7 @@
             </div>
         </div>
 
-        <!-- Event Info Card (Optional) -->
+        <!-- Event Info Card -->
         <div class="mt-6 bg-white rounded-2xl shadow-sm p-6">
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Event Information</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
