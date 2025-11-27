@@ -2,7 +2,6 @@ package org.example.last_java_project.Controllers;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.eclipse.tags.shaded.org.apache.xpath.operations.Mod;
 import org.example.last_java_project.Models.Event;
 import org.example.last_java_project.Models.LoginUser;
 import org.example.last_java_project.Models.User;
@@ -14,9 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class MainController {
@@ -48,17 +45,19 @@ public class MainController {
     @GetMapping("/events")
     public String showEvents(Model model,
                              @RequestParam(value = "search", required = false) String title,
-                             @RequestParam(value = "page", defaultValue = "0") int page) {
+                             @RequestParam(value = "page", defaultValue = "0") int page,
+                             @RequestParam(value = "category", required = false)String category) {
 
         int pageSize = 8;
-
-        List<Event> allEvents;
-        if (title == null || title.isBlank()) {
+        List<Event> allEvents = List.of();
+        if(title == null && category == null){
             allEvents = eventService.findAll();
-        } else {
+        }else if(title == null && category != null){
+            allEvents = eventService.getEventsByCategory(category);
+        }else if(title != null && category == null){
             allEvents = eventService.findByTitleContainsIgnoreCase(title);
         }
-
+        
         int totalEvents = allEvents.size();
         int totalPages = (int) Math.ceil((double) totalEvents / pageSize);
 
@@ -75,6 +74,8 @@ public class MainController {
             eventsPage = allEvents.subList(start, end);
         }
 
+
+        model.addAttribute("categories", eventService.getUniqueCategories());
         model.addAttribute("allEvents", allEvents);
         model.addAttribute("events", eventsPage);
         model.addAttribute("currentPage", page);
@@ -83,7 +84,7 @@ public class MainController {
         return "events";
     }
 
-    @GetMapping("/show_login")
+    @GetMapping("/login")
     public String showAuth(
             @ModelAttribute("user") LoginUser user,
             HttpSession session,
@@ -97,7 +98,7 @@ public class MainController {
 
         return "login";
     }
-    @GetMapping("/show_register")
+    @GetMapping("/register")
     public String showRegister(
             @ModelAttribute("newUser") User user,
             HttpSession session,
@@ -136,7 +137,6 @@ public class MainController {
             session.setAttribute("id", user.getId());
         }
 
-
         return "redirect:/";
     }
 
@@ -172,12 +172,6 @@ public class MainController {
         return "redirect:/";
     }
 
-//    @GetMapping("/events")
-//    public String showEvents(Model model) {
-//        model.addAttribute("events", eventService.findAll());
-//
-//        return "events";
-//    }
     @GetMapping("/event/{id}")
     public String showEvent(Model model, @PathVariable("id") Long id) {
         Event event= eventService.findById(id);

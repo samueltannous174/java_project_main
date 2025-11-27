@@ -37,6 +37,12 @@ public class EventService {
         return  eventRepository.findById(id).orElse(null);
     }
 
+    public List<String> getUniqueCategories(){
+        return eventRepository.getAllCategories();
+    }
 
+    public List<Event> getEventsByCategory(String category){
+        return eventRepository.getEventsByCategory(category);
+    }
 
 }
