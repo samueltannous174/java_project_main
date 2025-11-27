@@ -46,24 +46,31 @@
         </div>
 
         <div class="hidden sm:flex space-x-8">
-            <a href="/home"
-               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-base font-bold">
+            <a href="/"
+               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
                 Home
             </a>
             <a href="/events"
-               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-base font-bold">
+               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
                 Events
             </a>
-            <a href="/home#"
-               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-base font-bold">
+            <a href="/profile/${id}"
+               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
                 My Profile
             </a>
+
+            <c:if test="${logged.role == 'ORGANIZER'}">
+                <a href="/show_create"
+                   class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
+                    new Event
+                </a>
+            </c:if>
         </div>
 
-        <form class="hidden sm:flex" action="/logout" method="post" >
-           <input type="submit" value="Logout" class="ml-4 px-4 py-2 text-sm font-medium text-primary-purple/80 bg-background-white border border-primary-purple/20 rounded-md hover:bg-red-500 hover:text-white duration-150 flex items-center">
+        <form class="hidden sm:flex" action="/logout" method="post">
+            <input type="submit" value="Logout"
+                   class="ml-4 px-4 py-2 text-sm font-medium text-primary-purple/80 bg-background-white border border-primary-purple/20 rounded-md hover:bg-red-500 hover:text-white duration-150 flex items-center">
         </form>
-
     </div>
 </nav>
 

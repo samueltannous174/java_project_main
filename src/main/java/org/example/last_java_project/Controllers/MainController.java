@@ -2,7 +2,6 @@ package org.example.last_java_project.Controllers;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.eclipse.tags.shaded.org.apache.xpath.operations.Mod;
 import org.example.last_java_project.Models.*;
 import org.example.last_java_project.Services.EventService;
 import org.example.last_java_project.Services.UserService;
@@ -12,9 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class MainController {
@@ -34,8 +31,9 @@ public class MainController {
         Long loggedId = (Long) session.getAttribute("id");
 
         if (loggedId == null){
-            return "redirect:/show_login";
+            return "redirect:/login";
         }
+
 
         User logged = userService.findUser(loggedId);
         model.addAttribute("logged",logged);
@@ -47,7 +45,13 @@ public class MainController {
     public String showEvents(Model model,
                              @RequestParam(value = "search", required = false) String title,
                              @RequestParam(value = "page", defaultValue = "0") int page,
-                             @RequestParam(value = "category", required = false)String category) {
+                             @RequestParam(value = "category", required = false)String category,
+                             HttpSession session) {
+
+        Long loggedId = (Long) session.getAttribute("id");
+        if (loggedId == null){
+            return "redirect:/login";
+        }
 
         int pageSize = 8;
         List<Event> allEvents = List.of();
@@ -74,8 +78,8 @@ public class MainController {
         } else {
             eventsPage = allEvents.subList(start, end);
         }
-
-
+        User logged = userService.findUser(loggedId);
+        model.addAttribute("logged", logged);
         model.addAttribute("categories", eventService.getUniqueCategories());
         model.addAttribute("allEvents", allEvents);
         model.addAttribute("events", eventsPage);
@@ -117,7 +121,7 @@ public class MainController {
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute("newUser") User newUser, HttpSession session, BindingResult result){
         Long loggedId = (Long) session.getAttribute("id");
-        System.out.println(newUser);
+//        System.out.println(newUser);
         if (loggedId != null) {
             return "redirect:/";
         }
@@ -164,21 +168,31 @@ public class MainController {
 
     @PostMapping("/logout")
     public String logout(HttpSession session){
+        if(session.getAttribute("id") != null){
+            session.setAttribute("id", null);
+        }
+
         if (session != null) {
             session.invalidate();
         }
-
         return "redirect:/";
     }
 
-//    @GetMapping("/events")
-//    public String showEvents(Model model) {
-//        model.addAttribute("events", eventService.findAll());
-//
-//        return "events";
-//    }
     @GetMapping("/event/{id}")
-    public String showEvent(Model model, @PathVariable("id") Long id) {
+    public String showEvent(Model model, @PathVariable("id") Long id,
+                            HttpSession session) {
+        Long loggedId = (Long) session.getAttribute("id");
+        if (loggedId == null) {
+            return "redirect:/";
+        }
+
+        if(!eventService.isExist(id)){
+            return "redirect:/";
+        }
+
+        User logged = userService.findUser(loggedId);
+        model.addAttribute("logged", logged);
+
         Event event= eventService.findById(id);
         model.addAttribute("event", event);
 
@@ -187,13 +201,19 @@ public class MainController {
 
 
     @GetMapping("/show_create")
-    public String showCreate(Model model) {
+    public String showCreate(Model model,
+                             HttpSession session) {
+        Long loggedId = (Long) session.getAttribute("id");
+        if (loggedId == null) {
+            return "redirect:/";
+        }
         Event event = new Event();
 
         for (int i = 0; i < 3; i++) {
             event.getTasks().add(new Task());
             event.getSkills().add(new Skill());
         }
+
         model.addAttribute("event", event);
         return "createEvent";
     }
@@ -240,10 +260,25 @@ public class MainController {
                 }
             }
         }
-
         eventService.save(event);
-
         return "redirect:/events";
+    }
+
+    @GetMapping("/profile/{id}")
+    public String profile(@PathVariable("id")Long id,
+                          Model model,
+                          HttpSession session){
+        Long loggedId = (Long) session.getAttribute("id");
+        if (loggedId == null) {
+            return "redirect:/";
+        }
+        if(!loggedId.equals(id)){
+            return "redirect:/";
+        }
+
+        User logged = userService.findUser(id);
+        model.addAttribute("logged", logged);
+        return "profile";
     }
 
 }

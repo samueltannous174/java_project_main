@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
@@ -36,28 +37,32 @@
 
         <div class="hidden sm:flex space-x-8">
             <a href="/"
-               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-base font-medium">
+               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
                 Home
             </a>
             <a href="/events"
-               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-base font-medium">
+               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
                 Events
             </a>
-            <a href="/home#"
-               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-base font-medium">
+            <a href="/profile/${id}"
+               class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
                 My Profile
             </a>
+
+            <c:if test="${logged.role == 'ORGANIZER'}">
+                <a href="/show_create"
+                   class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
+                    new Event
+                </a>
+            </c:if>
         </div>
 
-        <div class="hidden sm:flex">
-            <a href="/logout"
-               class="ml-4 px-4 py-2 text-sm font-medium text-primary-purple/80 bg-background-white border border-primary-purple/20 rounded-md hover:bg-red-500 hover:text-white duration-150 flex items-center">
-                Logout
-            </a>
-        </div>
+        <form class="hidden sm:flex" action="/logout" method="post">
+            <input type="submit" value="Logout"
+                   class="ml-4 px-4 py-2 text-sm font-medium text-primary-purple/80 bg-background-white border border-primary-purple/20 rounded-md hover:bg-red-500 hover:text-white duration-150 flex items-center">
+        </form>
     </div>
 </nav>
-
 
 <header class="max-w-6xl mx-auto px-4 py-6">
     <h1 class="text-4xl font-extrabold text-primary-purple">${event.title}</h1>
@@ -74,16 +79,11 @@
                 class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                 loading="lazy"
         />
-
-        <!-- Gradient overlay -->
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/40 to-transparent"></div>
-
-        <!-- Text overlay -->
         <div class="absolute bottom-5 left-5 right-5 text-white space-y-3">
             <p class="text-sm sm:text-base max-w-xl">
                 ${event.description}
             </p>
-
             <div class="flex items-center space-x-2 text-gray-200">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

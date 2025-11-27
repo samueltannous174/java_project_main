@@ -112,17 +112,17 @@
                     <form:errors path="password" cssClass="text-red-500 text-sm mt-1" />
                 </div>
 
-                <div class="flex items-center justify-between mb-6">
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" name="rememberMe"
-                               class="w-4 h-4 text-primary-purple bg-gray-100 border-gray-300 rounded focus:ring-primary-purple">
-                        <span class="text-sm text-gray-700">Remember me</span>
-                    </label>
-                    <a href="${pageContext.request.contextPath}/forgot-password"
-                       class="text-sm text-primary-purple hover:text-secondary-orange font-medium">
-                        Forgot password?
-                    </a>
-                </div>
+<%--                <div class="flex items-center justify-between mb-6">--%>
+<%--                    <label class="flex items-center gap-2 cursor-pointer">--%>
+<%--                        <input type="checkbox" name="rememberMe"--%>
+<%--                               class="w-4 h-4 text-primary-purple bg-gray-100 border-gray-300 rounded focus:ring-primary-purple">--%>
+<%--                        <span class="text-sm text-gray-700">Remember me</span>--%>
+<%--                    </label>--%>
+<%--                    <a href="${pageContext.request.contextPath}/forgot-password"--%>
+<%--                       class="text-sm text-primary-purple hover:text-secondary-orange font-medium">--%>
+<%--                        Forgot password?--%>
+<%--                    </a>--%>
+<%--                </div>--%>
 
                 <button type="submit"
                         class="w-full bg-primary-purple hover:bg-secondary-orange text-white font-semibold py-3 rounded-xl transition-all transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary-purple focus:ring-offset-2">
@@ -141,9 +141,10 @@
                     </div>
                 </c:if>
             </form:form>
-            <a class="text-orange-500" href="/show_register">
-                Sign up
-            </a>
+            <p class="text-center text-gray-600 mt-6">
+                Don't have an account?
+                <a href="/register" class="text-primary-purple hover:text-secondary-orange font-semibold">Sign up</a>
+            </p>
         </div>
 
     </div>
