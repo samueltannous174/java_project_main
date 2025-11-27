@@ -50,4 +50,8 @@ public class EventService {
         return eventRepository.getEventsByCategory(category);
     }
 
+    public boolean isExist(Long id){
+        return eventRepository.existsById(id);
+    }
+
 }

@@ -145,7 +145,7 @@
 
     <p class="text-center text-gray-600 mt-6">
         Already have an account?
-        <a href="/show_login" class="text-primary-purple hover:text-secondary-orange font-semibold">Sign in</a>
+        <a href="/login" class="text-primary-purple hover:text-secondary-orange font-semibold">Sign in</a>
     </p>
 </div>
 </body>
