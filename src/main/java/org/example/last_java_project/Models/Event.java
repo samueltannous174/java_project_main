@@ -66,10 +66,10 @@ public class Event {
             joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set <Event> users = new HashSet<>();
+    private Set <User> users = new HashSet<>();
 
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "events_skills",
             joinColumns = @JoinColumn(name = "event_id"),
@@ -99,13 +99,12 @@ public class Event {
     }
 
     public Event() {
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
     }
 
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-
-
 
 
     public long getId() {
@@ -172,11 +171,11 @@ public class Event {
         this.city = city;
     }
 
-    public Set<Event> getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
-    public void setUsers(Set<Event> users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
     }
 
@@ -195,6 +194,33 @@ public class Event {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public Set<Skill> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(Set<Skill> skills) {
+        this.skills = skills;
+    }
+
+    @PrePersist
+    protected void onCreate(){
+        this.createdAt = new Date();
+    }
+    @PreUpdate
+    protected void onUpdate(){
+        this.updatedAt = new Date();
+    }
+
+
 
     @Override
     public String toString() {

@@ -2,9 +2,8 @@ package org.example.last_java_project.Controllers;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.example.last_java_project.Models.Event;
-import org.example.last_java_project.Models.LoginUser;
-import org.example.last_java_project.Models.User;
+import org.eclipse.tags.shaded.org.apache.xpath.operations.Mod;
+import org.example.last_java_project.Models.*;
 import org.example.last_java_project.Services.EventService;
 import org.example.last_java_project.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class MainController {
@@ -57,7 +58,7 @@ public class MainController {
         }else if(title != null && category == null){
             allEvents = eventService.findByTitleContainsIgnoreCase(title);
         }
-        
+
         int totalEvents = allEvents.size();
         int totalPages = (int) Math.ceil((double) totalEvents / pageSize);
 
@@ -110,11 +111,8 @@ public class MainController {
             return "redirect:/";
         }
 
-
-
         return "register";
     }
-
 
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute("newUser") User newUser, HttpSession session, BindingResult result){
@@ -136,6 +134,7 @@ public class MainController {
         if (session.getAttribute("id") == null){
             session.setAttribute("id", user.getId());
         }
+
 
         return "redirect:/";
     }
@@ -172,12 +171,79 @@ public class MainController {
         return "redirect:/";
     }
 
+//    @GetMapping("/events")
+//    public String showEvents(Model model) {
+//        model.addAttribute("events", eventService.findAll());
+//
+//        return "events";
+//    }
     @GetMapping("/event/{id}")
     public String showEvent(Model model, @PathVariable("id") Long id) {
         Event event= eventService.findById(id);
         model.addAttribute("event", event);
 
         return "eventPage";
+    }
+
+
+    @GetMapping("/show_create")
+    public String showCreate(Model model) {
+        Event event = new Event();
+
+        for (int i = 0; i < 3; i++) {
+            event.getTasks().add(new Task());
+            event.getSkills().add(new Skill());
+        }
+        model.addAttribute("event", event);
+        return "createEvent";
+    }
+
+    @PostMapping("/create")
+    public String saveEvent(@Valid @ModelAttribute("event") Event event,
+                            BindingResult bindingResult,
+                            @RequestParam(value = "taskDescriptions", required = false) List<String> taskDescriptions,
+                            @RequestParam(value = "skillNames", required = false) List<String> skillNames) {
+
+        System.out.println(event);
+        if (bindingResult.hasErrors()) {
+            return "createEvent";
+        }
+
+        eventService.save(event);
+
+        if (taskDescriptions != null) {
+            for (String desc : taskDescriptions) {
+                if (desc != null && !desc.trim().isEmpty()) {
+                    Task task = new Task();
+                    task.setName(desc);
+                    task.setDescription(desc);
+                    System.out.println(event.getId());
+                    System.out.println(task.getId());
+                    task.setEvent(event);
+                    event.getTasks().add(task);
+                }
+            }
+        }
+
+
+        if (skillNames != null) {
+            for (String name : skillNames) {
+                if (name != null && !name.trim().isEmpty()) {
+                    Skill skill = new Skill();
+                    System.out.println(name);
+                    skill.setName(name);
+                    System.out.println(event.getId());
+                    System.out.println(skill.getId());
+
+                    skill.getEvents().add(event);
+                    event.getSkills().add(skill);
+                }
+            }
+        }
+
+        eventService.save(event);
+
+        return "redirect:/events";
     }
 
 }
