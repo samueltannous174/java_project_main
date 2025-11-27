@@ -17,7 +17,6 @@ public class Task {
     @Id
     @Column(name = "id", nullable = false)
     private long id;
-    @NotBlank
     @Column(name = "name", nullable = true, length = 45)
     private String name;
     @NotBlank
@@ -32,10 +31,24 @@ public class Task {
     @Column(name = "updated_at", nullable = true)
     private Date updatedAt;
 
+    public Task() {
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
+
 
     @ManyToOne
     @JoinColumn(name = "event_id")
     private Event event;
+
+    @PrePersist
+    protected void onCreate(){
+        this.createdAt = new Date();
+    }
+    @PreUpdate
+    protected void onUpdate(){
+        this.updatedAt = new Date();
+    }
 
 
     public long getId() {
@@ -78,4 +91,11 @@ public class Task {
         this.updatedAt = updatedAt;
     }
 
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
 }

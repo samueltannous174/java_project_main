@@ -28,6 +28,7 @@
 
 <header class="max-w-6xl mx-auto px-4 py-6">
     <h1 class="text-4xl font-extrabold text-primary-purple">${event.title}</h1>
+    <h1 class="text-4xl font-extrabold text-primary-purple">${desc}</h1>
 </header>
 
 <main class="max-w-6xl mx-auto px-4 pb-12">

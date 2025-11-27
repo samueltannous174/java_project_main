@@ -1,3 +1,4 @@
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
@@ -29,78 +30,81 @@
 </header>
 
 <main class="max-w-4xl mx-auto px-4 pb-12">
-    <form action="saveEvent" method="post" class="bg-white p-6 rounded-xl shadow space-y-6" >
+    <form:form action="/create" method="post" modelAttribute="event" class="bg-white p-6 rounded-xl shadow space-y-6">
 
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1" for="name">Event Name *</label>
-            <input type="text" name="name" id="name"
-                   class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
+            <form:label path="title" cssClass="block text-sm font-medium text-gray-700 mb-1">Event Name *</form:label>
+            <form:input path="title"
+                        cssClass="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
+            <form:errors path="title" cssClass="text-red-500 text-sm mt-1"/>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1" for="location">Location *</label>
-                <input type="text" name="location" id="location"
-                       class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
+                <form:label path="startDate" cssClass="block text-sm font-medium text-gray-700 mb-1">Start Date *</form:label>
+                <form:input path="startDate" type="date"
+                            cssClass="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
+                <form:errors path="startDate" cssClass="text-red-500 text-sm mt-1"/>
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1" for="date">Event Date *</label>
-                <input type="date" name="date" id="date"
-                       class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
+                <form:label path="endDate" cssClass="block text-sm font-medium text-gray-700 mb-1">End Date *</form:label>
+                <form:input path="endDate" type="date"
+                            cssClass="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
+                <form:errors path="endDate" cssClass="text-red-500 text-sm mt-1"/>
             </div>
         </div>
 
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1" for="category">Category *</label>
-            <select name="category" id="category"
-                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple">
-                <option value="" disabled selected>Select a category</option>
-                <option value="environment">Environment</option>
-                <option value="community">Community</option>
-                <option value="education">Education</option>
-                <option value="health">Health</option>
-            </select>
+            <form:label path="category" cssClass="block text-sm font-medium text-gray-700 mb-1">Category *</form:label>
+            <form:select path="category"
+                         cssClass="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple">
+                <form:option value="" label="Select a category"/>
+                <form:option value="environment" label="Environment"/>
+                <form:option value="community" label="Community"/>
+                <form:option value="education" label="Education"/>
+                <form:option value="health" label="Health"/>
+            </form:select>
+            <form:errors path="category" cssClass="text-red-500 text-sm mt-1"/>
         </div>
 
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1" for="imageUrl">Event Image URL (Optional)</label>
-            <input type="url" name="imageUrl" id="imageUrl" placeholder="https://example.com/image.jpg"
-                   class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
+            <form:label path="image_url" cssClass="block text-sm font-medium text-gray-700 mb-1">Event Image URL (Optional)</form:label>
+            <form:input path="image_url" type="url"
+                        cssClass="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
+            <form:errors path="image_url" cssClass="text-red-500 text-sm mt-1"/>
             <p class="text-xs text-gray-500 mt-1">Leave blank to use a default image</p>
         </div>
 
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1" for="description">Event Description *</label>
-            <textarea name="description" id="description" rows="4"
-
-                      class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"></textarea>
+            <form:label path="description" cssClass="block text-sm font-medium text-gray-700 mb-1">Event Description *</form:label>
+            <form:textarea path="description" rows="4"
+                           cssClass="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
+            <form:errors path="description" cssClass="text-red-500 text-sm mt-1"/>
         </div>
 
-        <hr class="border-gray-700 my-4"/>
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Tasks (3)</label>
-            <div class="space-y-2">
-                <input type="text" name="task1" placeholder="Task 1"
-                       class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
-                <input type="text" name="task2" placeholder="Task 2"
-                       class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
-                <input type="text" name="task3" placeholder="Task 3"
-                       class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
-            </div>
-        </div>
 
         <hr class="border-gray-700 my-4"/>
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Skills Needed (3)</label>
-            <div class="space-y-2">
-                <input type="text" name="skill1" placeholder="Skill 1"
-                       class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
-                <input type="text" name="skill2" placeholder="Skill 2"
-                       class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
-                <input type="text" name="skill3" placeholder="Skill 3"
-                       class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
-            </div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Tasks</label>
+            <input type="text" name="taskDescriptions" placeholder="Task 1"
+                   class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
+            <input type="text" name="taskDescriptions" placeholder="Task 2"
+                   class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
+            <input type="text" name="taskDescriptions" placeholder="Task 3"
+                   class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
         </div>
+        <hr class="border-gray-700 my-4"/>
+
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Skills Needed</label>
+            <input type="text" name="skillNames" placeholder="Skill 1"
+                   class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
+            <input type="text" name="skillNames" placeholder="Skill 2"
+                   class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
+            <input type="text" name="skillNames" placeholder="Skill 3"
+                   class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
+        </div>
+
 
         <div class="text-right">
             <button type="submit"
@@ -109,7 +113,7 @@
             </button>
         </div>
 
-    </form>
+    </form:form>
 </main>
 </body>
 </html>

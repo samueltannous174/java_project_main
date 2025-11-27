@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -50,7 +47,39 @@ public class AiService {
         }
     }
 
-    // Your existing reactive methods
+
+    public List<String> getThreeTasks(String description) {
+        String prompt = "Based on this event: \"" + description + "\" give me exactly 3 tasks needed. Return as simple list: 1. Task one 2. Task two 3. Task three";
+
+        String response = sendPrompt(prompt);
+
+        // Simple parsing - extract tasks from response
+        return extractTasksFromText(response);
+    }
+
+    private List<String> extractTasksFromText(String text) {
+        List<String> tasks = new ArrayList<>();
+
+        String[] lines = text.split("\n");
+        for (String line : lines) {
+            if (line.matches(".*\\d+\\..*") || line.matches(".*\\d+\\).*")) {
+                String task = line.replaceAll("^\\s*\\d+[\\.\\)]\\s*", "").trim();
+                if (!task.isEmpty()) {
+                    tasks.add(task);
+                }
+            }
+        }
+
+        if (tasks.size() < 3) {
+            tasks.add("Plan and organize event logistics");
+            tasks.add("Coordinate with participants and stakeholders");
+            tasks.add("Prepare materials and resources");
+        }
+
+        return tasks.subList(0, Math.min(3, tasks.size()));
+    }
+
+
     public Mono<ChatResponse> chatCompletion(List<ChatRequest.Message> messages) {
         ChatRequest request = new ChatRequest(
                 config.getModel(),
@@ -93,68 +122,4 @@ public class AiService {
                 });
     }
 
-
-    public Map<String, Object> generateEventStructure(String description) {
-        String prompt = String.format(
-                "Based on this event description: \"%s\"\n\n" +
-                        "Generate a JSON response with this exact structure:\n" +
-                        "{\n" +
-                        "  \"title\": \"creative event title\",\n" +
-                        "  \"expectedOutcomes\": [\"outcome1\", \"outcome2\", \"outcome3\"],\n" +
-                        "  \"tasks\": [\"task1\", \"task2\", \"task3\", \"task4\"],\n" +
-                        "  \"skills\": [\"skill1\", \"skill2\", \"skill3\"]\n" +
-                        "}\n\n" +
-                        "Return ONLY valid JSON, no other text.",
-                description
-        );
-
-        String response = sendPrompt(prompt);
-
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-
-            TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {};
-            return mapper.readValue(response, typeRef);
-
-        } catch (Exception e) {
-            log.error("Failed to parse AI response: {}", e.getMessage());
-            log.error("Raw AI response: {}", response);
-
-            String json = extractJsonFromResponse(response);
-            if (json != null) {
-                try {
-                    ObjectMapper mapper = new ObjectMapper();
-                    TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {};
-                    return mapper.readValue(json, typeRef);
-                } catch (Exception ex) {
-                    log.error("Failed to parse extracted JSON: {}", ex.getMessage());
-                }
-            }
-
-            return createFallbackStructure();
-        }
-    }
-
-    private String extractJsonFromResponse(String response) {
-        try {
-            int start = response.indexOf('{');
-            int end = response.lastIndexOf('}');
-
-            if (start != -1 && end != -1 && end > start) {
-                return response.substring(start, end + 1);
-            }
-        } catch (Exception e) {
-            log.error("Error extracting JSON: {}", e.getMessage());
-        }
-        return null;
-    }
-
-    private Map<String, Object> createFallbackStructure() {
-        Map<String, Object> fallback = new HashMap<>();
-        fallback.put("title", "Event Title");
-        fallback.put("expectedOutcomes", Arrays.asList("Learn new skills", "Network with peers", "Achieve project goals"));
-        fallback.put("tasks", Arrays.asList("Prepare materials", "Set up venue", "Coordinate participants"));
-        fallback.put("skills", Arrays.asList("Communication", "Teamwork", "Problem-solving"));
-        return fallback;
-    }
 }

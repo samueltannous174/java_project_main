@@ -141,13 +141,20 @@
                     </div>
                 </c:if>
             </form:form>
+            <a class="text-orange-500" href="/show_register">
+                Sign up
+            </a>
         </div>
+
     </div>
+
 </div>
 
 <button class="fixed bottom-8 right-8 bg-primary-purple hover:bg-secondary-orange text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-all transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:ring-offset-2">
     <i class="fas fa-question"></i>
+
 </button>
+
 
 
 </body>

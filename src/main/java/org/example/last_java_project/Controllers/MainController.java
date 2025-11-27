@@ -3,9 +3,8 @@ package org.example.last_java_project.Controllers;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.eclipse.tags.shaded.org.apache.xpath.operations.Mod;
-import org.example.last_java_project.Models.Event;
-import org.example.last_java_project.Models.LoginUser;
-import org.example.last_java_project.Models.User;
+import org.example.last_java_project.Models.*;
+import org.example.last_java_project.Repositories.EventRepository;
 import org.example.last_java_project.Services.EventService;
 import org.example.last_java_project.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +24,8 @@ public class MainController {
     EventService eventService;
     @Autowired
     UserService userService;
+    @Autowired
+    private EventRepository eventRepository;
 
     @RequestMapping("/**")
     public String Error404(){
@@ -112,6 +113,7 @@ public class MainController {
         return "register";
     }
 
+
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute("newUser") User newUser, HttpSession session, BindingResult result){
         Long loggedId = (Long) session.getAttribute("id");
@@ -161,7 +163,7 @@ public class MainController {
     }
 
     @PostMapping("/logout")
-    public String logout(HttpSession session){
+    public String logout(HttpSession session) {
         if (session != null) {
             session.invalidate();
         }
@@ -181,6 +183,67 @@ public class MainController {
         model.addAttribute("event", event);
 
         return "eventPage";
+    }
+
+
+    @GetMapping("/show_create")
+    public String showCreate(Model model) {
+        Event event = new Event();
+
+        for (int i = 0; i < 3; i++) {
+            event.getTasks().add(new Task());
+            event.getSkills().add(new Skill());
+        }
+        model.addAttribute("event", event);
+        return "createEvent";
+    }
+
+    @PostMapping("/create")
+    public String saveEvent(@Valid @ModelAttribute("event") Event event,
+                            BindingResult bindingResult,
+                            @RequestParam(value = "taskDescriptions", required = false) List<String> taskDescriptions,
+                            @RequestParam(value = "skillNames", required = false) List<String> skillNames) {
+
+        System.out.println(event);
+        if (bindingResult.hasErrors()) {
+            return "createEvent";
+        }
+
+        eventService.save(event);
+
+        if (taskDescriptions != null) {
+            for (String desc : taskDescriptions) {
+                if (desc != null && !desc.trim().isEmpty()) {
+                    Task task = new Task();
+                    task.setName(desc);
+                    task.setDescription(desc);
+                    System.out.println(event.getId());
+                    System.out.println(task.getId());
+                    task.setEvent(event);
+                    event.getTasks().add(task);
+                }
+            }
+        }
+
+
+        if (skillNames != null) {
+            for (String name : skillNames) {
+                if (name != null && !name.trim().isEmpty()) {
+                    Skill skill = new Skill();
+                    System.out.println(name);
+                    skill.setName(name);
+                    System.out.println(event.getId());
+                    System.out.println(skill.getId());
+
+                    skill.getEvents().add(event);
+                    event.getSkills().add(skill);
+                }
+            }
+        }
+
+        eventService.save(event);
+
+        return "redirect:/events";
     }
 
 }

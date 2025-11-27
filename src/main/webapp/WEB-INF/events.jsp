@@ -160,9 +160,9 @@
                     </div>
 
                     <div class="px-6 pb-5 mt-auto">
-                        <button class="w-full rounded-full bg-primary-purple py-3 text-base font-semibold text-white hover:bg-secondary-orange">
+                        <a href="/event/${event.id}" class="w-full rounded-full px-3  bg-primary-purple py-3 text-base font-semibold text-white hover:bg-secondary-orange">
                             View Details
-                        </button>
+                        </a>
                     </div>
                 </div>
             </c:forEach>

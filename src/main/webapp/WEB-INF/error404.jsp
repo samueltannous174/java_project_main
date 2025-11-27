@@ -15,7 +15,7 @@
         Sorry, the page you are looking for doesn't exist or has been moved.
     </p>
 
-    <a href="/home"
+    <a href="/"
        class="inline-block px-6 py-3 rounded-full bg-blue-600 text-white font-semibold text-lg hover:bg-blue-700 transition">
         Back to Home
     </a>
