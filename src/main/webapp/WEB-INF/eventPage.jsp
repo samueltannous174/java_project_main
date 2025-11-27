@@ -48,13 +48,6 @@
                class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
                 My Profile
             </a>
-
-            <c:if test="${logged.role == 'ORGANIZER'}">
-                <a href="/show_create"
-                   class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
-                    new Event
-                </a>
-            </c:if>
         </div>
 
         <form class="hidden sm:flex" action="/logout" method="post">
@@ -63,6 +56,7 @@
         </form>
     </div>
 </nav>
+
 
 <header class="max-w-6xl mx-auto px-4 py-6">
     <h1 class="text-4xl font-extrabold text-primary-purple">${event.title}</h1>
@@ -79,11 +73,16 @@
                 class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                 loading="lazy"
         />
+
+        <!-- Gradient overlay -->
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/40 to-transparent"></div>
+
+        <!-- Text overlay -->
         <div class="absolute bottom-5 left-5 right-5 text-white space-y-3">
             <p class="text-sm sm:text-base max-w-xl">
                 ${event.description}
             </p>
+
             <div class="flex items-center space-x-2 text-gray-200">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -108,18 +107,12 @@
                 </h2>
 
                 <ul class="space-y-2">
-                    <li class="flex items-center space-x-2">
-                        <span class="text-green-600">✔</span>
-                        <span>Remove 500kg of trash</span>
-                    </li>
-                    <li class="flex items-center space-x-2">
-                        <span class="text-green-600">✔</span>
-                        <span>Protect marine ecosystems</span>
-                    </li>
-                    <li class="flex items-center space-x-2">
-                        <span class="text-green-600">✔</span>
-                        <span>Raise environmental awareness</span>
-                    </li>
+                    <c:forEach var="outcome" items="${outcomes}">
+                        <li class="flex items-center space-x-2">
+                            <span class="text-green-600">✔</span>
+                            <span> ${outcome.description}</span>
+                        </li>
+                    </c:forEach>
                 </ul>
             </div>
 
@@ -134,22 +127,12 @@
                 </h2>
 
                 <ol class="space-y-3">
-                    <li class="flex items-center space-x-2">
-                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full font-semibold text-sm">1</span>
-                        <span>Collect trash and debris</span>
-                    </li>
-                    <li class="flex items-center space-x-2">
-                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full font-semibold text-sm">2</span>
-                        <span>Sort recyclables</span>
-                    </li>
-                    <li class="flex items-center space-x-2">
-                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full font-semibold text-sm">3</span>
-                        <span>Document findings</span>
-                    </li>
-                    <li class="flex items-center space-x-2">
-                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full font-semibold text-sm">4</span>
-                        <span>Educate beachgoers</span>
-                    </li>
+                        <c:forEach var="task" items="${tasks}">
+                            <li class="flex items-center space-x-2">
+                                <span class="text-green-600">✔</span>
+                                <span> ${task.name}</span>
+                            </li>
+                        </c:forEach>
                 </ol>
             </div>
 

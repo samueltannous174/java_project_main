@@ -2,8 +2,10 @@ package org.example.last_java_project.Controllers;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.eclipse.tags.shaded.org.apache.xpath.operations.Mod;
 import org.example.last_java_project.Models.*;
 import org.example.last_java_project.Services.EventService;
+import org.example.last_java_project.Services.SkillService;
 import org.example.last_java_project.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,7 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class MainController {
@@ -20,6 +24,9 @@ public class MainController {
     EventService eventService;
     @Autowired
     UserService userService;
+    @Autowired
+    SkillService skillService;
+
 
     @RequestMapping("/**")
     public String Error404(){
@@ -31,9 +38,8 @@ public class MainController {
         Long loggedId = (Long) session.getAttribute("id");
 
         if (loggedId == null){
-            return "redirect:/login";
+            return "redirect:/show_login";
         }
-
 
         User logged = userService.findUser(loggedId);
         model.addAttribute("logged",logged);
@@ -115,23 +121,28 @@ public class MainController {
             return "redirect:/";
         }
 
+        model.addAttribute("allSkills", skillService.getAll());
+
         return "register";
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("newUser") User newUser, HttpSession session, BindingResult result){
+    public String register(@Valid @ModelAttribute("newUser") User newUser, HttpSession session, BindingResult result,Model model){
         Long loggedId = (Long) session.getAttribute("id");
-//        System.out.println(newUser);
+        System.out.println(newUser);
         if (loggedId != null) {
             return "redirect:/";
         }
 
         if (result.hasErrors()) {
-            return "register";
+            model.addAttribute("allSkills", skillService.getAll());
+
+            return "register" ;
         }
         User user= userService.register(newUser,result);
 
         if (result.hasErrors()) {
+            model.addAttribute("allSkills", skillService.getAll());
             return "register";
         }
 
@@ -195,25 +206,25 @@ public class MainController {
 
         Event event= eventService.findById(id);
         model.addAttribute("event", event);
+        model.addAttribute("outcomes", event.getOutcomes());
+        model.addAttribute("skills", event.getSkills());
+        model.addAttribute("tasks", event.getTasks());
+
 
         return "eventPage";
     }
 
 
-    @GetMapping("/show_create")
-    public String showCreate(Model model,
-                             HttpSession session) {
-        Long loggedId = (Long) session.getAttribute("id");
-        if (loggedId == null) {
-            return "redirect:/";
-        }
+    @GetMapping("/create")
+    public String showCreate(Model model) {
         Event event = new Event();
 
         for (int i = 0; i < 3; i++) {
             event.getTasks().add(new Task());
             event.getSkills().add(new Skill());
         }
-
+        System.out.println(skillService.getAll());
+        model.addAttribute("allSkills", skillService.getAll());
         model.addAttribute("event", event);
         return "createEvent";
     }
@@ -221,11 +232,16 @@ public class MainController {
     @PostMapping("/create")
     public String saveEvent(@Valid @ModelAttribute("event") Event event,
                             BindingResult bindingResult,
+                            Model model,
                             @RequestParam(value = "taskDescriptions", required = false) List<String> taskDescriptions,
-                            @RequestParam(value = "skillNames", required = false) List<String> skillNames) {
+                            @RequestParam(value="skillIds", required=false) List<Long> skillIds,
+                            @RequestParam(value = "outcomesNames", required = false) List<String> outcomesNames
+    ) {
+
 
         System.out.println(event);
         if (bindingResult.hasErrors()) {
+            model.addAttribute("allSkills", skillService.getAll());
             return "createEvent";
         }
 
@@ -245,24 +261,34 @@ public class MainController {
             }
         }
 
-
-        if (skillNames != null) {
-            for (String name : skillNames) {
-                if (name != null && !name.trim().isEmpty()) {
-                    Skill skill = new Skill();
-                    System.out.println(name);
-                    skill.setName(name);
-                    System.out.println(event.getId());
-                    System.out.println(skill.getId());
-
-                    skill.getEvents().add(event);
+        if ( skillIds != null) {
+            for (Long id : skillIds) {
+                if (id != null) {
+                    Skill skill = skillService.findById(id);
                     event.getSkills().add(skill);
+
                 }
             }
         }
+        if (outcomesNames != null) {
+            for (String name : outcomesNames) {
+                if (name != null && !name.trim().isEmpty()) {
+                    Outcome outcome = new Outcome();
+                    outcome.setDescription(name);
+                    outcome.setEvent(event);
+                    event.getOutcomes().add(outcome);
+                }
+            }
+        }
+
         eventService.save(event);
+
         return "redirect:/events";
     }
+
+
+
+
 
     @GetMapping("/profile/{id}")
     public String profile(@PathVariable("id")Long id,

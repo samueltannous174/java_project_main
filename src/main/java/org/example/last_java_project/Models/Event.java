@@ -55,6 +55,9 @@ public class Event {
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Task> tasks = new ArrayList<>();
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Outcome> outcomes = new ArrayList<>();
+
 
     @ManyToOne
     @JoinColumn(name = "organizer_id")
@@ -209,6 +212,14 @@ public class Event {
 
     public void setSkills(Set<Skill> skills) {
         this.skills = skills;
+    }
+
+    public List<Outcome> getOutcomes() {
+        return outcomes;
+    }
+
+    public void setOutcomes(List<Outcome> outcomes) {
+        this.outcomes = outcomes;
     }
 
     @PrePersist
