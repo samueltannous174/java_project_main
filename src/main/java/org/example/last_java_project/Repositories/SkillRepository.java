@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SkillRepository  extends CrudRepository<Skill,Long> {
-
+        public Skill findByName(String name);
 }

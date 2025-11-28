@@ -1,15 +1,17 @@
 package org.example.last_java_project.Services;
 
 import org.example.last_java_project.Models.LoginUser;
+import org.example.last_java_project.Models.Skill;
 import org.example.last_java_project.Models.User;
 import org.example.last_java_project.Repositories.UserRepository;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
-import java.time.LocalDate;
-import java.time.Period;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -73,5 +75,18 @@ public class UserService {
         }
 
         return user;
+    }
+
+
+    public void updateUser(Long id, String firstname, String lastname, String imageUrl, String role, List<Skill> skills) {
+        User user = userRepository.findById(id).orElseThrow();
+
+        user.setFirstname(firstname);
+        user.setLastname(lastname);
+        user.setImage_url(imageUrl);
+        user.setRole(role);
+        user.setSkills((skills != null) ? new HashSet<>(skills) : new HashSet<>());
+
+        userRepository.save(user);
     }
 }

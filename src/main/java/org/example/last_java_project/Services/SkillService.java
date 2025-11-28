@@ -27,6 +27,12 @@ public class SkillService {
         return  skillRepository.findById(id).orElse(null);
     }
 
+    public void save(Skill skill){
+        skillRepository.save(skill);
+    }
+    public Skill findByName(String name){
+      return  skillRepository.findByName(name);
+    }
     public List<Skill> getAll(){
        return (List<Skill>) skillRepository.findAll();
     }
