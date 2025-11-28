@@ -61,7 +61,7 @@
 </header>
 
 <main class="max-w-4xl mx-auto px-4 pb-12">
-    <form:form action="/create" method="post" modelAttribute="event" class="bg-white p-6 rounded-xl shadow space-y-6">
+    <form:form action="/ai/create2" method="post" modelAttribute="event" class="bg-white p-6 rounded-xl shadow space-y-6">
 
         <div>
             <form:label path="title" cssClass="block text-sm font-medium text-gray-700 mb-1">Event Name *</form:label>
@@ -95,18 +95,7 @@
             </form:select>
             <form:errors path="category" cssClass="text-red-500 text-sm mt-1"/>
         </div>
-        <div class="mb-6">
-            <label class="block text-orange-700 font-medium mb-2">Your Skills</label>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
-                <c:forEach var="skill" items="${allSkills}">
-                    <label class="flex items-center space-x-2 p-2 hover:bg-orange-50 rounded">
-                        <input type="checkbox" name="skillIds" value="${skill.id}"
-                               class="rounded border-orange-300 text-primary-purple focus:ring-primary-purple">
-                        <span class="text-sm text-gray-700">${skill.name}</span>
-                    </label>
-                </c:forEach>
-            </div>
-        </div>
+
         <div>
             <form:label path="image_url" cssClass="block text-sm font-medium text-gray-700 mb-1">Event Image URL (Optional)</form:label>
             <form:input path="image_url" type="url"
@@ -130,27 +119,7 @@
         </div>
 
 
-        <hr class="border-gray-700 my-4"/>
-        <div class="mt-9">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Tasks</label>
-            <input type="text" name="taskDescriptions" placeholder="Task 1"
-                   class="w-full border border-orange-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
-            <input type="text" name="taskDescriptions" placeholder="Task 2"
-                   class="w-full mt-5 border border-orange-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
-            <input type="text" name="taskDescriptions" placeholder="Task 3"
-                   class="w-full mt-5 border border-orange-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
-        </div>
-        <hr class="border-gray-700 my-4"/>
 
-        <div class="mt-9">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Expected Outcomes</label>
-            <input type="text"  name="outcomesNames" placeholder="outcome-1"
-                   class="w-full border border-orange-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
-            <input type="text" name="outcomesNames" placeholder="outcome-2"
-                   class="w-full  mt-5 border border-orange-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
-            <input type="text" name="outcomesNames" placeholder="outcome-3"
-                   class="w-full border mt-5  border-orange-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:border-primary-purple"/>
-        </div>
         <div class="text-right">
             <button type="submit"
                     class="bg-primary-purple text-white font-semibold px-6 py-2 rounded-lg hover:bg-secondary-orange transition">

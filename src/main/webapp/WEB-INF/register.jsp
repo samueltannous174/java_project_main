@@ -37,8 +37,8 @@
         }
     </script>
 </head>
-<body class="bg-gradient-to-br from-primary-purple/10 to-secondary-orange/10 min-h-screen flex items-center justify-center p-6">
-<div class="bg-white rounded-3xl shadow-2xl p-8 lg:p-12 w-full max-w-md">
+<body class="bg-gradient-to-br w-full from-primary-purple/10 to-secondary-orange/10 min-h-screen flex items-center justify-center p-6">
+<div class="bg-white rounded-3xl shadow-2xl p-8 lg:p-12  w-1/2">
     <div class="mb-8 text-center">
         <h2 class="text-3xl font-bold text-gray-800 mb-2">Create Account</h2>
         <p class="text-gray-500">Sign up to start your volunteering journey</p>

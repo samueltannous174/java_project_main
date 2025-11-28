@@ -27,7 +27,7 @@ public class Event {
     @Column(name = "category", nullable = true, length = 45)
     private String category;
     @NotBlank
-    @Column(name = "description", nullable = true, length = 100)
+    @Column(name = "description", nullable = true, length = 900)
     private String description;
 
     @Column(name = "image_url", nullable = true, length = -1)
@@ -232,6 +232,13 @@ public class Event {
     }
 
 
+    public User getOrganizer() {
+        return organizer;
+    }
+
+    public void setOrganizer(User organizer) {
+        this.organizer = organizer;
+    }
 
     @Override
     public String toString() {

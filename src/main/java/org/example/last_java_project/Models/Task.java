@@ -17,7 +17,7 @@ public class Task {
     @Id
     @Column(name = "id", nullable = false)
     private long id;
-    @Column(name = "name", nullable = true, length = 45)
+    @Column(name = "name", nullable = true, length = 800)
     private String name;
     @NotBlank
     @Column(name = "description", nullable = true, length = -1)

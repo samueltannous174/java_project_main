@@ -65,7 +65,7 @@
             </a>
 
             <c:if test="${logged.role == 'ORGANIZER'}">
-                <a href="/show_create"
+                <a href="/create"
                    class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
                     new Event
                 </a>
@@ -123,6 +123,19 @@
     <div class="mt-8 flex items-center justify-between">
         <h2 class="text-3xl font-semibold">All Events</h2>
         <p class="text-base text-primary-purple/60">${fn:length(allEvents)} Event/s Found</p>
+        <div class="flex gap-4">
+            <a href="/create"
+               class=" px-4 text-center rounded-full bg-orange-300 py-3 text-base font-semibold text-white hover:bg-secondary-orange">
+                Create Event
+            </a>
+            <a href="/ai/"
+               class=" px-4 text-center rounded-full bg-orange-300 py-3 text-base font-semibold text-white hover:bg-secondary-orange">
+                Create Event Using Ai
+            </a>
+
+        </div>
+
+
     </div>
 
     <div class="mt-8 grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
@@ -152,7 +165,7 @@
                                 ${event.title}
                         </h3>
 
-                        <p class="text-sm text-primary-purple/60 mb-3">by Alex Johnson</p>
+                        <p class="text-sm text-primary-purple/60 mb-3">${orgnizer.firstName } ${orgnizer.lastName }</p>
 
                         <div class="space-y-1 text-base text-primary-purple/80">
                             <p>

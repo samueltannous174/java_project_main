@@ -2,8 +2,10 @@ package org.example.last_java_project.Controllers;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.eclipse.tags.shaded.org.apache.xpath.operations.Mod;
 import org.example.last_java_project.Models.*;
+import org.example.last_java_project.Services.AiService;
 import org.example.last_java_project.Services.EventService;
 import org.example.last_java_project.Services.SkillService;
 import org.example.last_java_project.Services.UserService;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -26,6 +29,8 @@ public class MainController {
     UserService userService;
     @Autowired
     SkillService skillService;
+    @Autowired
+    AiService aiService;
 
 
     @RequestMapping("/**")
@@ -127,7 +132,7 @@ public class MainController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("newUser") User newUser, HttpSession session, BindingResult result,Model model){
+    public String register(@Valid @ModelAttribute("newUser") User newUser, BindingResult result, HttpSession session,Model model){
         Long loggedId = (Long) session.getAttribute("id");
         System.out.println(newUser);
         if (loggedId != null) {
@@ -216,14 +221,26 @@ public class MainController {
 
 
     @GetMapping("/create")
-    public String showCreate(Model model) {
+    public String showCreate(Model model, HttpSession session) {
+
+        Long loggedId = (Long) session.getAttribute("id");
+        if (loggedId == null) {
+            return "redirect:/";
+        }
+
+
+
+        User logged = userService.findUser(loggedId);
+        model.addAttribute("logged", logged);
+
+
         Event event = new Event();
 
         for (int i = 0; i < 3; i++) {
             event.getTasks().add(new Task());
             event.getSkills().add(new Skill());
         }
-        System.out.println(skillService.getAll());
+        model.addAttribute("categories", eventService.getUniqueCategories());
         model.addAttribute("allSkills", skillService.getAll());
         model.addAttribute("event", event);
         return "createEvent";
@@ -233,13 +250,19 @@ public class MainController {
     public String saveEvent(@Valid @ModelAttribute("event") Event event,
                             BindingResult bindingResult,
                             Model model,
+                            HttpSession session,
                             @RequestParam(value = "taskDescriptions", required = false) List<String> taskDescriptions,
                             @RequestParam(value="skillIds", required=false) List<Long> skillIds,
                             @RequestParam(value = "outcomesNames", required = false) List<String> outcomesNames
     ) {
+        Long loggedId = (Long) session.getAttribute("id");
+        if (loggedId == null) {
+            return "redirect:/";
+        }
 
+        User logged = userService.findUser(loggedId);
+        model.addAttribute("logged", logged);
 
-        System.out.println(event);
         if (bindingResult.hasErrors()) {
             model.addAttribute("allSkills", skillService.getAll());
             return "createEvent";
@@ -253,8 +276,6 @@ public class MainController {
                     Task task = new Task();
                     task.setName(desc);
                     task.setDescription(desc);
-                    System.out.println(event.getId());
-                    System.out.println(task.getId());
                     task.setEvent(event);
                     event.getTasks().add(task);
                 }
@@ -281,6 +302,8 @@ public class MainController {
             }
         }
 
+        event.setOrganizer(logged);
+
         eventService.save(event);
 
         return "redirect:/events";
@@ -303,6 +326,7 @@ public class MainController {
         return "profile";
     }
 
+
     @GetMapping("chat")
     public String chatAi(HttpSession session,
                          Model model){
@@ -312,5 +336,37 @@ public class MainController {
         }
         return "chatAI";
     }
+    @PostMapping ("add_user_to_event")
+
+    public String addUserToEvent(@RequestParam("event_id") Long event_id, HttpSession session){
+        Long loggedId = (Long) session.getAttribute("id");
+        if (loggedId == null) {
+            return "redirect:/";
+        }
+
+        User logged = userService.findUser(loggedId);
+
+        Event event= eventService.findById(event_id);
+        event.getUsers().add(logged);
+        eventService.save(event);
+        return "redirect:/events";
+    }
+
+    @PostMapping ("remove_user_to_event")
+
+    public String removeUserToEvent(@RequestParam("event_id") Long event_id, HttpSession session){
+        Long loggedId = (Long) session.getAttribute("id");
+        if (loggedId == null) {
+            return "redirect:/";
+        }
+
+        User logged = userService.findUser(loggedId);
+        Event event= eventService.findById(event_id);
+        event.getUsers().remove(logged);
+        eventService.save(event);
+        return "redirect:/events";
+    }
+
+
 
 }

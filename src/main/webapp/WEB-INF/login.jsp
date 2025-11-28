@@ -115,7 +115,7 @@
 <%--                <div class="flex items-center justify-between mb-6">--%>
 <%--                    <label class="flex items-center gap-2 cursor-pointer">--%>
 <%--                        <input type="checkbox" name="rememberMe"--%>
-<%--                               class="w-4 h-4 text-primary-purple bg-gray-100 border-gray-300 rounded focus:ring-primary-purple">--%>
+<%--                               class="w-4 h-4 text-primary-purple bg-gray-100 border-orange-300 rounded focus:ring-primary-purple">--%>
 <%--                        <span class="text-sm text-gray-700">Remember me</span>--%>
 <%--                    </label>--%>
 <%--                    <a href="${pageContext.request.contextPath}/forgot-password"--%>

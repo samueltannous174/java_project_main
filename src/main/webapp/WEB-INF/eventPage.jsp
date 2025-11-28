@@ -1,4 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
@@ -62,33 +64,30 @@
     <h1 class="text-4xl font-extrabold text-primary-purple">${event.title}</h1>
 </header>
 
-<!-- Main -->
 <main class="max-w-6xl mx-auto px-4 pb-12">
 
-    <!-- Hero section -->
     <section class="relative w-full sm:h-[400px] h-[300px] rounded-xl overflow-hidden bg-gray-200 shadow">
         <img
                 src="${event.image_url}"
                 alt="Event image"
                 class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                loading="lazy"
         />
 
-        <!-- Gradient overlay -->
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/40 to-transparent"></div>
 
-        <!-- Text overlay -->
         <div class="absolute bottom-5 left-5 right-5 text-white space-y-3">
-            <p class="text-sm sm:text-base max-w-xl">
+            <p class="text-sm text-orange-200 sm:text-base max-w-xl">
                 ${event.description}
             </p>
 
-            <div class="flex items-center space-x-2 text-gray-200">
+            <div class="flex items-center space-x-2 text-orange-200 ">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2v-5H3v5a2 2 0 002 2z"/>
                 </svg>
-                <span>${event.startDate}</span>
+                <p class="">
+                    <fmt:formatDate  value="${event.startDate}" pattern="yyyy-MM-dd" />
+                </p>
             </div>
         </div>
     </section>
@@ -116,7 +115,6 @@
                 </ul>
             </div>
 
-            <!-- Tasks -->
             <div class="bg-background-white p-6 rounded-xl shadow border">
                 <h2 class="text-lg font-semibold flex items-center space-x-2 mb-4 text-primary-purple">
                     <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -142,29 +140,48 @@
 
             <div class="bg-background-white p-6 rounded-xl shadow border">
                 <h3 class="text-lg font-semibold text-primary-purple">Available Spots</h3>
-                <p class="text-2xl font-bold mt-1 text-primary-purple">16 / 50</p>
-
+                <p class="text-2xl font-bold mt-1 text-primary-purple">
+                    ${fn:length(event.users)}/ 50
+                </p>
                 <div class="w-full bg-gray-200 h-2 rounded-full mt-2">
                     <div class="h-2 bg-primary-purple rounded-full" style="width: 32%;"></div>
                 </div>
+                <c:if test="${ fn:contains(event.users, logged.id)}">
+                    <form action="/remove_user_to_event" method="post">
+                        <input name="event_id" type="hidden" value="${event.id}">
+                        <button class="w-full bg-primary-purple text-white py-2 rounded-lg mt-4 hover:bg-secondary-orange transition font-semibold">
+                            unRegister
+                        </button>
+                        <p class="text-green-700 bg-green-100 mt-3 p-2 rounded-lg text-sm text-center">
+                            ✓ You're registered for this event!
+                        </p>
+                    </form>
+                </c:if>
 
-                <button
-                        class="w-full bg-primary-purple text-white py-2 rounded-lg mt-4 hover:bg-secondary-orange transition font-semibold">
-                    Unregister
-                </button>
 
-                <p class="text-green-700 bg-green-100 mt-3 p-2 rounded-lg text-sm text-center">
-                    ✓ You're registered for this event!
-                </p>
+                <c:if test="${not fn:contains(event.users, logged.id)}">
+                    <form action="/add_user_to_event" method="post">
+                        <input name="event_id" type="hidden" value="${event.id}">
+                        <button class="w-full bg-primary-purple text-white py-2 rounded-lg mt-4 hover:bg-secondary-orange transition font-semibold">
+                            Register
+                        </button>
+
+                    </form>
+                </c:if>
+
+
+
+
             </div>
 
             <div class="bg-background-white p-6 rounded-xl shadow border">
                 <h3 class="text-lg font-semibold mb-3 text-primary-purple">Required Skills</h3>
 
                 <div class="flex flex-wrap gap-2">
-                    <span class="bg-gray-100 text-primary-purple px-3 py-1 rounded-full text-sm">Physical fitness</span>
-                    <span class="bg-gray-100 text-primary-purple px-3 py-1 rounded-full text-sm">Teamwork</span>
-                    <span class="bg-gray-100 text-primary-purple px-3 py-1 rounded-full text-sm">Environmental awareness</span>
+                    <c:forEach var="skill" items="${skills}">
+                        <span class="bg-gray-100 text-primary-purple px-3 py-1 rounded-full text-sm">${skill.name}</span>
+                    </c:forEach>
+
                 </div>
 
                 <p class="text-sm text-gray-600 mt-3">
