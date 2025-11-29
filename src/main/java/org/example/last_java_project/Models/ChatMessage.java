@@ -14,12 +14,13 @@ import java.util.Set;
 @Table(name = "chat_messages")
 public class ChatMessage {
     @Id
-    @Column(name = "id", nullable = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
     @NotBlank
     @Column(name = "content", nullable = true, length = -1)
     private String content;
-    @NotBlank
+    @NotNull
     @Column(name = "type", nullable = true)
     private Byte type;
     @NotNull
@@ -31,13 +32,6 @@ public class ChatMessage {
     @Column(name = "updated_at", nullable = true)
     private Date updatedAt;
 
-    @ManyToMany
-    @JoinTable(
-            name = "users_events",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "event_id")
-    )
-    Set<Event> events= new HashSet<>();
 
 
     @ManyToOne
@@ -47,6 +41,10 @@ public class ChatMessage {
     @ManyToOne
     @JoinColumn(name = "event_id")
     private Event event;
+
+    public ChatMessage() {
+
+    }
 
 
     public Long getId() {
@@ -77,6 +75,16 @@ public class ChatMessage {
         return createdAt;
     }
 
+    @PrePersist
+    protected void onCreate(){
+        this.createdAt = new Date();
+    }
+    @PreUpdate
+    protected void onUpdate(){
+        this.updatedAt = new Date();
+    }
+
+
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
@@ -89,6 +97,40 @@ public class ChatMessage {
         this.updatedAt = updatedAt;
     }
 
+    public User getUser() {
+        return user;
+    }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
 
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
+    public ChatMessage(String content, Byte type) {
+        this.content = content;
+        this.type = type;
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+
+    }
+
+    @Override
+    public String toString() {
+        return "ChatMessage{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", type=" + type +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", user=" + user +
+                ", event=" + event +
+                '}';
+    }
 }

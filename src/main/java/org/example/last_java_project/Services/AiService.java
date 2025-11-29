@@ -143,12 +143,10 @@ public class AiService {
         Map<String, Object> result = new HashMap<>();
 
         try {
-            // Initialize with empty lists
             result.put("tasks", new ArrayList<String>());
             result.put("outcomes", new ArrayList<String>());
             result.put("skills", new ArrayList<String>());
 
-            // More flexible parsing
             if (response.contains("TASKS:") && response.contains("OUTCOMES:") && response.contains("SKILLS:")) {
                 String tasksSection = response.split("TASKS:")[1].split("OUTCOMES:")[0].trim();
                 String outcomesSection = response.split("OUTCOMES:")[1].split("SKILLS:")[0].trim();
@@ -182,18 +180,15 @@ public class AiService {
     private List<String> extractNumberedItems(String text) {
         List<String> items = new ArrayList<>();
         try {
-            // Regex to match patterns like "1. Item", "2. Item", etc.
             Pattern pattern = Pattern.compile("\\d+\\.\\s*([^\\d]+)");
             Matcher matcher = pattern.matcher(text);
 
             while (matcher.find()) {
                 String item = matcher.group(1).trim();
-                // Clean up any trailing punctuation
                 item = item.replaceAll("[.,;\\s]+$", "");
                 items.add(item);
             }
 
-            // If no numbered items found, try alternative parsing
             if (items.isEmpty()) {
                 String[] parts = text.split("\\d+\\.");
                 for (String part : parts) {
@@ -207,7 +202,6 @@ public class AiService {
             System.out.println("Error extracting numbered items: " + e.getMessage());
         }
 
-        // Ensure we have exactly 3 items
         while (items.size() < 3) {
             items.add("Default task " + (items.size() + 1));
         }

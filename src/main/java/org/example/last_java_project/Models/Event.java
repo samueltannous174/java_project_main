@@ -240,6 +240,14 @@ public class Event {
         this.organizer = organizer;
     }
 
+    public List<ChatMessage> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<ChatMessage> messages) {
+        this.messages = messages;
+    }
+
     @Override
     public String toString() {
         return "Events{" +

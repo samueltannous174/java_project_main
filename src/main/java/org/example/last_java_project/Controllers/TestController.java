@@ -2,6 +2,8 @@ package org.example.last_java_project.Controllers;
 
 
 import org.example.last_java_project.Models.Skill;
+import org.example.last_java_project.Models.User;
+import org.example.last_java_project.Repositories.UserRepository;
 import org.example.last_java_project.Services.SkillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class TestController {
     @Autowired
     private SkillService skillService;
+    @Autowired
+    private UserRepository userRepository;
 
 
     @GetMapping("/add_skills")
@@ -30,8 +34,11 @@ public class TestController {
         return "home";
     }
 
+    @GetMapping("/add_chat")
+    public String addChat(){
 
-
-
+        userRepository.save(new User("ai", "ai","ai@gmail.com","ai"));
+        return "home";
+    }
 
 }
