@@ -37,24 +37,6 @@ public class AIController {
 
 
 
-
-
-    @GetMapping("/ask")
-    public String askAI(@RequestParam(required = false) String q , Model model) {
-        String response = aiService.sendPrompt("give me a simple certification html few code");
-        String formattedResponse = String.format(
-                "🤔 Question: %s\n\n" +
-                        "🤖 Answer: %s\n\n" +
-                        "📅 Timestamp: %s",
-                q, response, java.time.LocalDateTime.now()
-        );
-
-        model.addAttribute("desc",response);
-        return "eventPage";
-    }
-
-
-
     @PostMapping ("/pdf")
     public ResponseEntity<byte[]> downloadSimpleCertificate(
             @RequestParam("volunteerName") String volunteerName,

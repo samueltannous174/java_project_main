@@ -67,9 +67,7 @@
 </nav>
 
 <div class="max-w-5xl mx-auto px-4 py-8">
-    <!-- CHAT CARD with fixed height -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden h-[75vh] flex flex-col">
-        <!-- TABS -->
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden  flex flex-col">
         <div class="border-b border-gray-200">
             <div class="flex">
                 <button type="button"
@@ -90,10 +88,8 @@
             </div>
         </div>
 
-        <!-- PARTICIPANT CHAT -->
         <div id="participantChat" class="flex-1 flex flex-col hidden">
             <div class="flex-1 overflow-y-auto p-6 space-y-4 scroll-smooth bg-gray-50">
-                <!-- Example participant messages -->
                 <div class="chat-message flex items-start gap-3">
                     <div class="flex-shrink-0">
                         <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
@@ -133,7 +129,7 @@
             </div>
 
             <div class="border-t border-gray-200 bg-white p-4">
-                <form id="participantChatForm" onsubmit="sendMessage(event)" class="flex gap-3">
+                <form id="participantChatForm" class="flex gap-3">
                     <input
                             type="text"
                             id="participantMessageInput"
@@ -153,7 +149,7 @@
 
         <div id="aiChat" class="flex-1 flex flex-col">
             <div id="aiMessagesContainer"
-                 class="flex-1 overflow-y-auto p-6 space-y-4 scroll-smooth bg-gray-50">
+                 class="flex-1 scroll-smooth p-6 space-y-4 overflow-y-visible bg-gray-50">
 
                 <div class="chat-message flex items-start gap-3">
                     <div class="flex-shrink-0">
@@ -173,6 +169,50 @@
                                 Feel free to ask me about tasks, required materials, or anything else!
                             </p>
                         </div>
+
+
+
+
+                        <c:forEach var="message" items="${event.messages}">
+                            <c:choose>
+                                <c:when test="${message.user.id == 9}">
+                                    <div class="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
+                                        <p class="text-gray-700">
+                                                ${message.content}
+                                        </p>
+                                    </div>
+                                </c:when>
+
+                                <c:when test="${message.user.id == logged.id}">
+                                    <div class="flex-1 flex flex-col items-end">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="text-xs text-gray-500">2:42 PM</span>
+                                            <span class="font-semibold text-gray-800">You</span>
+                                        </div>
+                                        <div class="bg-primary-purple text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-sm max-w-md">
+                                            <p>
+                                                    ${message.content}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </c:when>
+
+                                <c:otherwise>
+                                    <div class="flex-1 flex flex-col items-end">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="text-xs text-gray-500">2:42 PM</span>
+                                            <span class="font-semibold text-gray-800">${message.user.firstname}</span>
+                                        </div>
+                                        <div class="bg-orange-200 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-sm max-w-md">
+                                            <p>
+                                                    ${message.content}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
                     </div>
                 </div>
             </div>
@@ -195,21 +235,28 @@
             </div>
 
             <div class="border-t border-gray-200 bg-white p-4">
-                <form id="aiChatForm" onsubmit="sendMessage(event)" class="flex gap-3">
+                <form id="aiChatForm" action="/ai/message" method="post" class="flex gap-3">
                     <input
                             type="text"
+                            name="content"
                             id="aiMessageInput"
                             placeholder="Ask the AI assistant..."
                             class="flex-1 px-4 py-3 bg-gray-100 border-none rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-purple transition-all"
                             autocomplete="off"
                             required
                     />
+
+                    <input type="hidden" name="user_id" value="${logged.id}">
+                    <input type="hidden" name="event_id" value="${event.id}">
+                    <input type="hidden" name="type" value="1">
+
                     <button
                             type="submit"
                             class="bg-primary-purple hover:bg-purple-900 text-white px-5 py-3 rounded-xl transition-all transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:ring-offset-2 shadow-lg">
                         <i class="fas fa-paper-plane"></i>
                     </button>
                 </form>
+
             </div>
         </div>
     </div>
@@ -223,14 +270,12 @@
         const aiChat = document.getElementById('aiChat');
 
         if (tab === 'participant') {
-            // tab styles
             participantTab.classList.add('text-primary-purple', 'bg-gray-50', 'border-primary-purple');
             participantTab.classList.remove('text-gray-600', 'border-transparent');
 
             aiTab.classList.add('text-gray-600', 'border-transparent');
             aiTab.classList.remove('text-primary-purple', 'bg-gray-50', 'border-primary-purple');
 
-            // content
             participantChat.classList.remove('hidden');
             participantChat.classList.add('flex');
             aiChat.classList.add('hidden');

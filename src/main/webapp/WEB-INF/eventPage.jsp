@@ -27,6 +27,7 @@
     </script>
 </head>
 
+
 <body class="bg-slate-50 text-slate-900 antialiased font-sans">
 
 <nav class="bg-background-white shadow-md w-full h-[80px] flex items-center px-4 sm:px-8 flex-shrink-0 border-b border-primary-purple/10 sticky top-0 z-50">
@@ -90,8 +91,13 @@
                 </p>
             </div>
         </div>
+
+
     </section>
 
+    <a class="w-full bg-primary-purple mt-1 text-white  rounded-lg   " href="/chat/${event.id}">
+        Chats
+    </a>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-10">
 
         <div class="lg:col-span-2 space-y-6">

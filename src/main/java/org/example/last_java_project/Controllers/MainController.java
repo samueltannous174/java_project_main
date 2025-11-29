@@ -5,10 +5,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.eclipse.tags.shaded.org.apache.xpath.operations.Mod;
 import org.example.last_java_project.Models.*;
-import org.example.last_java_project.Services.AiService;
-import org.example.last_java_project.Services.EventService;
-import org.example.last_java_project.Services.SkillService;
-import org.example.last_java_project.Services.UserService;
+import org.example.last_java_project.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +28,9 @@ public class MainController {
     SkillService skillService;
     @Autowired
     AiService aiService;
+    @Autowired
+    MessageService messageService;
+
 
 
     @RequestMapping("/**")
@@ -327,15 +327,6 @@ public class MainController {
     }
 
 
-    @GetMapping("chat")
-    public String chatAi(HttpSession session,
-                         Model model){
-        Long loggedId = (Long) session.getAttribute("id");
-        if (loggedId == null) {
-            return "redirect:/";
-        }
-        return "chatAI";
-    }
     @PostMapping ("add_user_to_event")
 
     public String addUserToEvent(@RequestParam("event_id") Long event_id, HttpSession session){
@@ -366,6 +357,52 @@ public class MainController {
         eventService.save(event);
         return "redirect:/events";
     }
+
+    @GetMapping("chat/{id}")
+    public String chatAi(HttpSession session,
+                         @PathVariable("id") Long id,
+                         Model model){
+        Long loggedId = (Long) session.getAttribute("id");
+        if (loggedId == null) {
+            return "redirect:/";
+        }
+        User logged = userService.findUser(loggedId);
+        model.addAttribute("logged", logged);
+
+        Event event = eventService.findById(id);
+        model.addAttribute("event", event);
+
+
+        return "chatAI";
+    }
+
+
+    @PostMapping("/ai/message")
+    public String addAiMessage(@RequestParam("user_id") Long  user_id,
+                               @RequestParam("event_id") Long  event_id,
+                               @RequestParam("content") String  content ,
+                               @RequestParam("type") Byte  type ){
+        ChatMessage chatMessage = new ChatMessage(content, type);
+        Event event= eventService.findById(event_id);
+        chatMessage.setEvent(event);
+        User user= userService.findUser(user_id);
+        chatMessage.setUser(user);
+
+        System.out.println(chatMessage);
+        messageService.save(chatMessage);
+
+      String response = aiService.sendPrompt(content);
+
+        ChatMessage chatMessage2 = new ChatMessage(response, type);
+        chatMessage2.setEvent(event);
+        User chat = userService.findUser(9L);
+        chatMessage2.setUser(chat);
+        messageService.save(chatMessage2);
+
+
+        return "redirect:/chat/"+ event.getId();
+    }
+
 
 
 
