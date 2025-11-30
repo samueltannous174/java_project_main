@@ -54,7 +54,7 @@
             <c:if test="${logged.role == 'ORGANIZER'}">
                 <a href="/create"
                    class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
-                    new Event
+                    New Event
                 </a>
             </c:if>
         </div>
@@ -98,7 +98,7 @@
                                     <div class="w-10 h-10 bg-gray-300 rounded-full overflow-hidden flex items-center justify-center">
                                         <img
                                                 class="w-full h-full object-cover"
-                                                src="${logged.image_url}"
+                                                src="${message.user.image_url}"
                                                 alt="profile"
                                         />
                                     </div>

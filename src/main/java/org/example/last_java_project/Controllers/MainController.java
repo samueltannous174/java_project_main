@@ -47,6 +47,7 @@ public class MainController {
         }
 
         User logged = userService.findUser(loggedId);
+
         model.addAttribute("logged",logged);
 
         return "home";
@@ -104,7 +105,6 @@ public class MainController {
             @ModelAttribute("user") LoginUser user,
             HttpSession session,
             Model model) {
-//        session.invalidate();
         Long loggedId = (Long) session.getAttribute("id");
 
         if (loggedId != null) {
@@ -170,6 +170,8 @@ public class MainController {
             return "login";
         }
 
+
+
         User loggedUser=userService.login(user, result);
 
         if(result.hasErrors()){
@@ -177,6 +179,9 @@ public class MainController {
         }
         if (session.getAttribute("id") == null){
             session.setAttribute("id", loggedUser.getId());
+        }
+        if (loggedUser.getRole().equals("ADMIN")){
+            return  "redirect:/admin";
         }
         return "redirect:/";
     }
@@ -394,7 +399,7 @@ public class MainController {
         System.out.println(chatMessage);
         messageService.save(chatMessage);
 
-      String response = aiService.sendPrompt(content);
+      String response = aiService.sendVolunteerHelp(content);
 
         ChatMessage chatMessage2 = new ChatMessage(response, type);
         chatMessage2.setEvent(event);
@@ -420,8 +425,6 @@ public class MainController {
         User user = userService.findUser(user_id);
         chatMessage.setUser(user);
         messageService.save(chatMessage);
-
-        System.out.println(chatMessage.getContent()+" by "+user.getFirstname());
 
         return "redirect:/chat/"+ event.getId()+"?activeTab=participant";
     }

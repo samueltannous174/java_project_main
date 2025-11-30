@@ -44,6 +44,8 @@
         <p class="text-gray-500">Sign up to start your volunteering journey</p>
     </div>
 
+
+
     <form:form method="POST" action="/register" modelAttribute="newUser">
         <div class="mb-4 flex gap-4">
             <div class="w-1/2">

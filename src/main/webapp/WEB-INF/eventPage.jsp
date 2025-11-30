@@ -28,6 +28,7 @@
 </head>
 
 
+
 <body class="bg-slate-50 text-slate-900 antialiased font-sans">
 
 <nav class="bg-background-white shadow-md w-full h-[80px] flex items-center px-4 sm:px-8 flex-shrink-0 border-b border-primary-purple/10 sticky top-0 z-50">
@@ -51,6 +52,13 @@
                class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
                 My Profile
             </a>
+
+            <c:if test="${logged.role == 'ORGANIZER'}">
+                <a href="/create"
+                   class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
+                    New Event
+                </a>
+            </c:if>
         </div>
 
         <form class="hidden sm:flex" action="/logout" method="post">
@@ -59,7 +67,6 @@
         </form>
     </div>
 </nav>
-
 
 <header class="max-w-6xl mx-auto px-4 py-6">
     <h1 class="text-4xl font-extrabold text-primary-purple">${event.title}</h1>
@@ -114,14 +121,25 @@
 
 
 
-    <a
-            href="/chat/${event.id}"
-            class="w-1/4 bg-primary-purple text-white py-3 rounded-lg mt-2
-           flex items-center justify-center font-semibold
-           hover:bg-secondary-orange transition duration-200"
-    >
-        Chats
-    </a>
+
+    <c:set var="isRegistered" value="false" />
+
+    <c:forEach var="u" items="${event.users}">
+        <c:if test="${u.id == logged.id}">
+            <c:set var="isRegistered" value="true" />
+        </c:if>
+    </c:forEach>
+
+    <c:if test="${isRegistered or event.organizer.id == logged.id}">
+        <a
+                href="/chat/${event.id}"
+                class="w-1/4 bg-primary-purple text-white py-3 rounded-lg mt-2
+               flex items-center justify-center font-semibold
+               hover:bg-secondary-orange transition duration-200"
+        >
+            Chats
+        </a>
+    </c:if>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-10">
 
         <div class="lg:col-span-2 space-y-6">
