@@ -47,6 +47,7 @@ public class MainController {
         }
 
         User logged = userService.findUser(loggedId);
+
         model.addAttribute("logged",logged);
 
         return "home";
@@ -104,7 +105,6 @@ public class MainController {
             @ModelAttribute("user") LoginUser user,
             HttpSession session,
             Model model) {
-//        session.invalidate();
         Long loggedId = (Long) session.getAttribute("id");
 
         if (loggedId != null) {
