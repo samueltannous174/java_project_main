@@ -34,9 +34,6 @@ public class AIController {
     @Autowired
     SkillService skillService;
 
-
-
-
     @PostMapping ("/pdf")
     public ResponseEntity<byte[]> downloadSimpleCertificate(
             @RequestParam("volunteerName") String volunteerName,

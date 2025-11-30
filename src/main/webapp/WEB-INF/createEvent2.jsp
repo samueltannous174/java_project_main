@@ -45,6 +45,13 @@
                class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
                 My Profile
             </a>
+
+            <c:if test="${logged.role == 'ORGANIZER'}">
+                <a href="/create"
+                   class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
+                    New Event
+                </a>
+            </c:if>
         </div>
 
         <form class="hidden sm:flex" action="/logout" method="post">
@@ -53,7 +60,6 @@
         </form>
     </div>
 </nav>
-
 
 <body class="bg-slate-50 text-slate-900 font-sans antialiased">
 <header class="max-w-4xl mx-auto px-4 py-6">

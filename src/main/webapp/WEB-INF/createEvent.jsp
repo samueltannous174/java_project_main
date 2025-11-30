@@ -45,6 +45,13 @@
                class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
                 My Profile
             </a>
+
+            <c:if test="${logged.role == 'ORGANIZER'}">
+                <a href="/create"
+                   class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
+                    New Event
+                </a>
+            </c:if>
         </div>
 
         <form class="hidden sm:flex" action="/logout" method="post">
@@ -54,14 +61,19 @@
     </div>
 </nav>
 
-
 <body class="bg-slate-50 text-slate-900 font-sans antialiased">
 <header class="max-w-4xl mx-auto px-4 py-6">
     <h1 class="text-3xl font-bold text-primary-purple">Create New Event</h1>
 </header>
 
+
 <main class="max-w-4xl mx-auto px-4 pb-12">
     <form:form action="/create" method="post" modelAttribute="event" class="bg-white p-6 rounded-xl shadow space-y-6">
+
+        <a href="/ai/"
+           class=" px-4 text-center rounded-full bg-orange-300 py-3 text-base font-semibold text-white hover:bg-secondary-orange">
+            Create Event Using Ai
+        </a>
 
         <div>
             <form:label path="title" cssClass="block text-sm font-medium text-gray-700 mb-1">Event Name *</form:label>
@@ -96,7 +108,7 @@
             <form:errors path="category" cssClass="text-red-500 text-sm mt-1"/>
         </div>
         <div class="mb-6">
-            <label class="block text-orange-700 font-medium mb-2">Your Skills</label>
+            <label class="block text-orange-700 font-medium mb-2">Required Skills</label>
             <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
                 <c:forEach var="skill" items="${allSkills}">
                     <label class="flex items-center space-x-2 p-2 hover:bg-orange-50 rounded">

@@ -35,6 +35,29 @@ public class AiService {
                 .build();
     }
 
+        public String sendVolunteerHelp(String userQuestion) {
+        try {
+            String prompt =
+                    "You are a helpful assistant for volunteers. " +
+                            "Answer clearly, simply, and politely. " +
+                            "Avoid long paragraphs. " +
+                            "The volunteer asks: \"" + userQuestion + "\". " +
+                            "Give a helpful answer.";
+
+            log.info("Sending volunteer help prompt: {}", prompt);
+
+            String response = generateResponse(prompt).block();
+
+            log.info("Volunteer help response: {}", response);
+            return response;
+
+        } catch (Exception e) {
+            log.error("Error in sendVolunteerHelp: {}", e.getMessage(), e);
+            return "Sorry, I couldn't generate a helpful response.";
+        }
+    }
+
+
     public String sendPrompt(String prompt) {
         try {
             log.info("Sending prompt to AI: {}", prompt);
@@ -49,7 +72,6 @@ public class AiService {
             return "Sorry, I encountered an error: " + e.getMessage();
         }
     }
-
 
     public Mono<ChatResponse> chatCompletion(List<ChatRequest.Message> messages) {
         ChatRequest request = new ChatRequest(

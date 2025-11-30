@@ -64,6 +64,9 @@ public class User {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updatedAt;
 
+    private String status;
+
+
     @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Event> createdEvents = new ArrayList<>();
 
@@ -121,6 +124,14 @@ public class User {
         this.lastname = lastname;
     }
 
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getEmail() {
         return email;

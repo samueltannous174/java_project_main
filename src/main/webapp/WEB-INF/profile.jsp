@@ -40,7 +40,6 @@
 
 <body class="bg-background-white flex flex-col font-sans min-h-screen">
 
-<!-- NAVBAR -->
 <nav class="bg-background-white shadow-md w-full h-[80px] flex items-center px-4 sm:px-8 flex-shrink-0 border-b border-primary-purple/10 sticky top-0 z-50">
     <div class="flex justify-between items-center w-full">
         <div class="flex items-center">
@@ -86,9 +85,11 @@
             <section class="lg:col-span-2 bg-background-white border border-primary-purple/10 rounded-2xl shadow-sm p-8 space-y-7">
                 <div class="flex flex-col md:flex-row md:items-center gap-6">
                     <div class="flex-shrink-0">
-                        <div class="w-28 h-28 rounded-full bg-primary-purple flex items-center justify-center text-white text-4xl font-bold">
-                            ${logged.firstname.charAt(0)}${logged.lastname.charAt(0)}
-                        </div>
+<%--                        <div class="w-28 h-28 rounded-full bg-primary-purple flex items-center justify-center text-white text-4xl font-bold">--%>
+<%--                            ${logged.firstname.charAt(0)}${logged.lastname.charAt(0)}--%>
+<%--                        </div>--%>
+
+                        <img class="w-28 h-28 rounded-full bg-primary-purple flex items-center justify-center text-white text-4xl font-bold" src="${logged.image_url}"/>
                     </div>
 
                     <div class="flex-1 space-y-3">

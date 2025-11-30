@@ -64,7 +64,7 @@
             <c:if test="${logged.role == 'ORGANIZER'}">
                 <a href="/create"
                    class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
-                    new Event
+                    New Event
                 </a>
             </c:if>
         </div>
@@ -111,7 +111,7 @@
                     <i class="fas fa-users"></i>
                 </div>
                 <div class="ml-3">
-                    <p class="text-2xl font-bold text-primary-purple">${fn:length(users)+400}+</p>
+                    <p class="text-2xl font-bold text-primary-purple">${fn:length(users)}+</p>
                     <p class="text-sm text-primary-purple/60">Users</p>
                 </div>
             </div>
@@ -131,7 +131,7 @@
                     <i class="fas fa-hands-helping"></i>
                 </div>
                 <div class="ml-3">
-                    <p class="text-2xl font-bold text-primary-purple">${fn:length(volunteers)+400}</p>
+                    <p class="text-2xl font-bold text-primary-purple">${fn:length(volunteers)}</p>
                     <p class="text-sm text-primary-purple/60">Volunteers</p>
                 </div>
             </div>
