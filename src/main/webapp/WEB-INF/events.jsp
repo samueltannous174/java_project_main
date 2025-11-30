@@ -2,11 +2,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
+<fmt:setBundle basename="messages"/>
+<fmt:setLocale value="${pageContext.request.locale}" />
+<c:set var="currentLang" value="${pageContext.request.locale.language}" />
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${currentLang}" dir="${currentLang == 'ar' ? 'rtl' : 'ltr'}">
 <head>
     <meta charset="UTF-8">
-    <title>Voluntree - Events</title>
+    <title><fmt:message key="app.title.events"/></title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -46,36 +51,50 @@
     <div class="flex justify-between items-center w-full">
         <div class="flex items-center">
             <span class="ml-3 text-2xl font-extrabold text-primary-purple tracking-tight">
-                Voluntree
+                <fmt:message key="app.brand"/>
             </span>
         </div>
 
         <div class="hidden sm:flex space-x-8">
             <a href="/"
                class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
-                Home
+                <fmt:message key="nav.home"/>
             </a>
             <a href="/events"
                class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
-                Events
+                <fmt:message key="nav.events"/>
             </a>
             <a href="/profile/${id}"
                class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
-                My Profile
+                <fmt:message key="nav.myProfile"/>
             </a>
 
             <c:if test="${logged.role == 'ORGANIZER'}">
                 <a href="/create"
                    class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
-                    new Event
+                    <fmt:message key="nav.newEvent"/>
                 </a>
             </c:if>
         </div>
 
-        <form class="hidden sm:flex" action="/logout" method="post">
-            <input type="submit" value="Logout"
-                   class="ml-4 px-4 py-2 text-sm font-medium text-primary-purple/80 bg-background-white border border-primary-purple/20 rounded-md hover:bg-red-500 hover:text-white duration-150 flex items-center">
-        </form>
+        <div class="flex items-center gap-4">
+            <div class="hidden sm:flex items-center gap-2 text-sm">
+                <a href="?lang=en"
+                   class="px-2 py-1 rounded-full border border-primary-purple/30 text-primary-purple/80 hover:bg-primary-purple hover:text-white transition">
+                    EN
+                </a>
+                <a href="?lang=ar"
+                   class="px-2 py-1 rounded-full border border-primary-purple/30 text-primary-purple/80 hover:bg-primary-purple hover:text-white transition">
+                    AR
+                </a>
+            </div>
+
+
+            <form class="hidden sm:flex" action="/logout" method="post">
+                <input type="submit" value="<fmt:message key='nav.logout'/>"
+                       class="ml-4 px-4 py-2 text-sm font-medium text-primary-purple/80 bg-background-white border border-primary-purple/20 rounded-md hover:bg-red-500 hover:text-white duration-150 flex items-center">
+            </form>
+        </div>
     </div>
 </nav>
 
@@ -87,7 +106,6 @@
 
     <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
 
-        <!-- Search Bar (2/3 width on large screens) -->
         <div class="w-full lg:w-2/3">
             <form id="searchForm" action="/events" method="get" class="relative w-full">
                 <button type="submit"
@@ -100,7 +118,7 @@
                         type="text"
                         name="search"
                         value="${fn:escapeXml(currentSearch)}"
-                        placeholder="Search events, organizers, or keywords... (leave it empty to get all events)"
+                        placeholder="<fmt:message key='events.search.placeholder'/>"
                         class="w-full rounded-full border border-primary-purple/20 bg-background-white
                            py-3 pl-11 pr-5 text-lg shadow-sm
                            focus:border-primary-purple focus:outline-none focus:ring-1 focus:ring-primary-purple"
@@ -108,7 +126,6 @@
             </form>
         </div>
 
-        <!-- Category Select (1/3 width on large screens) -->
         <div class="w-full lg:w-1/3">
             <select
                     id="categorySelect"
@@ -116,7 +133,9 @@
                        px-4 py-2.5 text-sm shadow-sm focus:border-primary-purple
                        focus:outline-none focus:ring-1 focus:ring-primary-purple">
 
-                <option disabled ${empty currentCategory ? 'selected' : ''}>Category</option>
+                <option disabled ${empty currentCategory ? 'selected' : ''}>
+                    <fmt:message key="events.filter.categoryDefault"/>
+                </option>
 
                 <c:forEach var="cat" items="${categories}">
                     <option value="${cat}"
@@ -133,16 +152,18 @@
     <div id="eventsContainer">
 
         <div class="mt-8 flex items-center justify-between">
-            <h2 class="text-3xl font-semibold">All Events</h2>
+            <h2 class="text-3xl font-semibold">
+                <fmt:message key="events.title.all"/>
+            </h2>
             <p class="text-base text-primary-purple/60">
-                ${fn:length(allEvents)} Event/s Found
+                ${fn:length(allEvents)} <fmt:message key="events.count.label"/>
             </p>
         </div>
 
         <div class="mt-8 grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             <c:if test="${fn:length(events) == 0}">
                 <p class="mt-8 text-lg text-primary-purple/60">
-                    No events yet.
+                    <fmt:message key="events.none"/>
                 </p>
             </c:if>
             <c:if test="${fn:length(events) != 0}">
@@ -150,7 +171,8 @@
                     <div class="bg-background-white rounded-2xl shadow-lg border border-primary-purple/10 overflow-hidden flex flex-col h-full">
                         <div class="relative h-60">
                             <img src="${event.image_url}"
-                                 alt="${event.title}" class="w-full h-full object-cover">
+                                 alt="<fmt:message key='events.card.imageAlt'/>"
+                                 class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/5 to-transparent"></div>
 
                             <div class="absolute left-4 top-4 flex gap-2">
@@ -165,7 +187,7 @@
                                     ${event.title}
                             </h3>
 
-                                <%-- adjust this if you actually send organizer object --%>
+                                <%-- Organizer name if available --%>
                             <p class="text-sm text-primary-purple/60 mb-3">
                                 <c:if test="${not empty event.organizer}">
                                     ${event.organizer.firstname} ${event.organizer.lastname}
@@ -180,14 +202,17 @@
                                     <fmt:formatDate value="${event.endDate}" pattern="yyyy-MM-dd"/>
                                 </p>
                                 <p>${event.city}</p>
-                                <p>👥 ${fn:length(event.users)} volunteer/s joined</p>
+                                <p>
+                                    👥 ${fn:length(event.users)}
+                                    <fmt:message key="events.card.volunteersJoined"/>
+                                </p>
                             </div>
                         </div>
 
                         <div class="px-6 pb-5 mt-auto">
                             <a href="/event/${event.id}"
                                class="w-full block text-center rounded-full bg-primary-purple py-3 text-base font-semibold text-white hover:bg-secondary-orange">
-                                View Details
+                                <fmt:message key="events.card.viewDetails"/>
                             </a>
                         </div>
                     </div>
@@ -201,7 +226,6 @@
             <c:set var="currentSearchParam" value="${search}" />
             <c:set var="currentCategoryParam" value="${category}" />
 
-            <!-- Previous -->
             <c:if test="${currentPage > 0}">
                 <c:url var="prevUrl" value="/events">
                     <c:param name="page" value="${currentPage - 1}" />
@@ -214,11 +238,10 @@
                 </c:url>
 
                 <a href="${prevUrl}" class="px-4 py-2 bg-primary-purple text-white rounded-lg hover:bg-primary-purple/80">
-                    Previous
+                    <fmt:message key="pagination.previous"/>
                 </a>
             </c:if>
 
-            <!-- Page Numbers -->
             <c:forEach begin="0" end="${totalPages - 1}" var="i">
                 <c:url var="pageUrl" value="/events">
                     <c:param name="page" value="${i}" />
@@ -237,7 +260,6 @@
                 </a>
             </c:forEach>
 
-            <!-- Next -->
             <c:if test="${currentPage < totalPages - 1}">
                 <c:url var="nextUrl" value="/events">
                     <c:param name="page" value="${currentPage + 1}" />
@@ -250,7 +272,7 @@
                 </c:url>
 
                 <a href="${nextUrl}" class="px-4 py-2 bg-primary-purple text-white rounded-lg hover:bg-primary-purple/80">
-                    Next
+                    <fmt:message key="pagination.next"/>
                 </a>
             </c:if>
 

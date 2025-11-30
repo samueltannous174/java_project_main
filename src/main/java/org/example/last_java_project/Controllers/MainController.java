@@ -156,7 +156,7 @@ public class MainController {
         model.addAttribute("search", search);
         model.addAttribute("id", loggedId); // for profile link
 
-        return "events"; // /WEB-INF/events.jsp
+        return "events";
     }
 
 
@@ -165,7 +165,6 @@ public class MainController {
             @ModelAttribute("user") LoginUser user,
             HttpSession session,
             Model model) {
-//        session.invalidate();
         Long loggedId = (Long) session.getAttribute("id");
 
         if (loggedId != null) {

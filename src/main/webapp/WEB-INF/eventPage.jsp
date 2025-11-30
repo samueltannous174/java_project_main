@@ -1,13 +1,19 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<fmt:setBundle basename="messages"/>
+<fmt:setLocale value="${pageContext.request.locale}" />
+<c:set var="currentLang" value="${pageContext.request.locale.language}" />
+
 <!doctype html>
-<html lang="en">
+<html lang="${currentLang}" dir="${currentLang == 'ar' ? 'rtl' : 'ltr'}">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Event — Beach Cleanup Initiative</title>
+    <title><fmt:message key="app.title.eventDetails"/></title>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -27,44 +33,56 @@
     </script>
 </head>
 
-
-
 <body class="bg-slate-50 text-slate-900 antialiased font-sans">
 
 <nav class="bg-background-white shadow-md w-full h-[80px] flex items-center px-4 sm:px-8 flex-shrink-0 border-b border-primary-purple/10 sticky top-0 z-50">
     <div class="flex justify-between items-center w-full">
         <div class="flex items-center">
             <span class="ml-3 text-2xl font-extrabold text-primary-purple tracking-tight">
-                Voluntree
+                <fmt:message key="app.brand"/>
             </span>
         </div>
 
         <div class="hidden sm:flex space-x-8">
             <a href="/"
                class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
-                Home
+                <fmt:message key="nav.home"/>
             </a>
             <a href="/events"
                class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
-                Events
+                <fmt:message key="nav.events"/>
             </a>
             <a href="/profile/${id}"
                class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
-                My Profile
+                <fmt:message key="nav.myProfile"/>
             </a>
 
             <c:if test="${logged.role == 'ORGANIZER'}">
                 <a href="/create"
                    class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
-                    New Event
+                    <fmt:message key="nav.newEvent"/>
                 </a>
             </c:if>
         </div>
 
-        <form class="hidden sm:flex" action="/logout" method="post">
-            <input type="submit" value="Logout"
-                   class="ml-4 px-4 py-2 text-sm font-medium text-primary-purple/80 bg-background-white border border-primary-purple/20 rounded-md hover:bg-red-500 hover:text-white duration-150 flex items-center">
-        </form>
+        <div class="hidden sm:flex items-center gap-4">
+            <div class="flex items-center gap-2 text-sm">
+                <a href="?lang=en"
+                   class="px-2 py-1 rounded-full border border-primary-purple/30 text-primary-purple/80 hover:bg-primary-purple hover:text-white transition">
+                    EN
+                </a>
+                <a href="?lang=ar"
+                   class="px-2 py-1 rounded-full border border-primary-purple/30 text-primary-purple/80 hover:bg-primary-purple hover:text-white transition">
+                    AR
+                </a>
+            </div>
+
+            <form action="/logout" method="post">
+                <input type="submit"
+                       value="<fmt:message key='nav.logout'/>"
+                       class="ml-4 px-4 py-2 text-sm font-medium text-primary-purple/80 bg-background-white border border-primary-purple/20 rounded-md hover:bg-red-500 hover:text-white duration-150 flex items-center">
+            </form>
+        </div>
     </div>
 </nav>
 
@@ -75,7 +93,6 @@
 <main class="max-w-6xl mx-auto px-4 pb-12">
 
     <section class="relative w-full sm:h-[400px] h-[300px] rounded-xl overflow-hidden bg-gray-200 shadow">
-
         <img
                 src="${event.image_url}"
                 alt="Event image"
@@ -89,38 +106,30 @@
                 ${event.description}
             </p>
 
-            <div class="flex items-center space-x-2 text-orange-200 ">
+            <div class="flex items-center space-x-2 text-orange-200">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2v-5H3v5a2 2 0 002 2z"/>
                 </svg>
-                <p class="">
-                    <fmt:formatDate  value="${event.startDate}" pattern="yyyy-MM-dd" />
+                <p>
+                    <fmt:formatDate value="${event.startDate}" pattern="yyyy-MM-dd"/>
                 </p>
             </div>
         </div>
-
-
     </section>
 
-
-
     <div class="mt-4 p-4 bg-white w-1/4 shadow-md rounded-lg flex items-center gap-3">
-
         <img src="${organizer.image_url}" class="w-12 h-12 rounded-full bg-primary-purple text-white flex items-center justify-center text-lg font-semibold"/>
 
         <div>
-            <p class="text-sm text-gray-500">Organizer</p>
+            <p class="text-sm text-gray-500">
+                <fmt:message key="event.details.organizer.label"/>
+            </p>
             <p class="text-lg font-semibold text-gray-800">
                 ${organizer.firstname} ${organizer.lastname}
             </p>
         </div>
-
-
     </div>
-
-
-
 
     <c:set var="isRegistered" value="false" />
 
@@ -134,12 +143,13 @@
         <a
                 href="/chat/${event.id}"
                 class="w-1/4 bg-primary-purple text-white py-3 rounded-lg mt-2
-               flex items-center justify-center font-semibold
-               hover:bg-secondary-orange transition duration-200"
+                       flex items-center justify-center font-semibold
+                       hover:bg-secondary-orange transition duration-200"
         >
-            Chats
+            <fmt:message key="event.details.button.chats"/>
         </a>
     </c:if>
+
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-10">
 
         <div class="lg:col-span-2 space-y-6">
@@ -150,14 +160,14 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
-                    <span>Expected Outcomes</span>
+                    <span><fmt:message key="form.event.outcomes.label"/></span>
                 </h2>
 
                 <ul class="space-y-2">
                     <c:forEach var="outcome" items="${outcomes}">
                         <li class="flex items-center space-x-2">
                             <span class="text-green-600">✔</span>
-                            <span> ${outcome.description}</span>
+                            <span>${outcome.description}</span>
                         </li>
                     </c:forEach>
                 </ul>
@@ -169,16 +179,16 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M9 12h6m-6 4h6m5-8H4m16 0H4"/>
                     </svg>
-                    <span>Tasks & Responsibilities</span>
+                    <span><fmt:message key="event.details.tasksResponsibilities.title"/></span>
                 </h2>
 
                 <ol class="space-y-3">
-                        <c:forEach var="task" items="${tasks}">
-                            <li class="flex items-center space-x-2">
-                                <span class="text-green-600">✔</span>
-                                <span> ${task.name}</span>
-                            </li>
-                        </c:forEach>
+                    <c:forEach var="task" items="${tasks}">
+                        <li class="flex items-center space-x-2">
+                            <span class="text-green-600">✔</span>
+                            <span>${task.name}</span>
+                        </li>
+                    </c:forEach>
                 </ol>
             </div>
 
@@ -187,7 +197,9 @@
         <div class="space-y-6">
 
             <div class="bg-background-white p-6 rounded-xl shadow border">
-                <h3 class="text-lg font-semibold text-primary-purple">Available Spots</h3>
+                <h3 class="text-lg font-semibold text-primary-purple">
+                    <fmt:message key="event.details.spots.title"/>
+                </h3>
                 <p class="text-2xl font-bold mt-1 text-primary-purple">
                     ${fn:length(event.users)}/ 50
                 </p>
@@ -206,10 +218,10 @@
                     <form action="/remove_user_to_event" method="post">
                         <input name="event_id" type="hidden" value="${event.id}">
                         <button class="w-full bg-primary-purple text-white py-2 rounded-lg mt-4 hover:bg-secondary-orange transition font-semibold">
-                            unRegister
+                            <fmt:message key="event.details.button.unregister"/>
                         </button>
                         <p class="text-green-700 bg-green-100 mt-3 p-2 rounded-lg text-sm text-center">
-                            ✓ You're registered for this event!
+                            <fmt:message key="event.details.registered.message"/>
                         </p>
                     </form>
                 </c:if>
@@ -218,31 +230,27 @@
                     <form action="/add_user_to_event" method="post">
                         <input name="event_id" type="hidden" value="${event.id}">
                         <button class="w-full bg-primary-purple text-white py-2 rounded-lg mt-4 hover:bg-secondary-orange transition font-semibold">
-                            Register
+                            <fmt:message key="event.details.button.register"/>
                         </button>
-
                     </form>
                 </c:if>
             </div>
 
             <div class="bg-background-white p-6 rounded-xl shadow border">
-                <h3 class="text-lg font-semibold mb-3 text-primary-purple">Required Skills</h3>
+                <h3 class="text-lg font-semibold mb-3 text-primary-purple">
+                    <fmt:message key="form.event.requiredSkills.label"/>
+                </h3>
 
                 <div class="flex flex-wrap gap-2">
                     <c:forEach var="skill" items="${skills}">
                         <span class="bg-gray-100 text-primary-purple px-3 py-1 rounded-full text-sm">${skill.name}</span>
                     </c:forEach>
-
                 </div>
 
                 <p class="text-sm text-gray-600 mt-3">
-                    Don’t have all the skills? No problem! Many can be learned during the event.
+                    <fmt:message key="event.details.skills.hint"/>
                 </p>
             </div>
-
-
-
-
         </div>
     </div>
 </main>
