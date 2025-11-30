@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.eclipse.tags.shaded.org.apache.xpath.operations.Mod;
 import org.example.last_java_project.Models.*;
+import org.example.last_java_project.Repositories.MessageRepository;
 import org.example.last_java_project.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,7 +31,6 @@ public class MainController {
     AiService aiService;
     @Autowired
     MessageService messageService;
-
 
 
     @RequestMapping("/**")
@@ -104,7 +104,7 @@ public class MainController {
             @ModelAttribute("user") LoginUser user,
             HttpSession session,
             Model model) {
-
+//        session.invalidate();
         Long loggedId = (Long) session.getAttribute("id");
 
         if (loggedId != null) {
@@ -376,7 +376,6 @@ public class MainController {
         Event event = eventService.findById(id);
         model.addAttribute("event", event);
 
-
         return "chatAI";
     }
 
@@ -404,10 +403,26 @@ public class MainController {
         messageService.save(chatMessage2);
 
 
-        return "redirect:/chat/"+ event.getId();
+        return "redirect:/chat/"+ event.getId()+"?activeTab=ai";
     }
 
 
 
+    @PostMapping("/participant/message")
+    public String addParticipantMessage(@RequestParam("user_id") Long user_id,
+                               @RequestParam("event_id") Long event_id,
+                               @RequestParam("content") String content ,
+                               @RequestParam("type") Byte type){
+        System.out.println();
+        ChatMessage chatMessage = new ChatMessage(content, type);
+        Event event= eventService.findById(event_id);
+        chatMessage.setEvent(event);
+        User user = userService.findUser(user_id);
+        chatMessage.setUser(user);
+        messageService.save(chatMessage);
 
+        System.out.println(chatMessage.getContent()+" by "+user.getFirstname());
+
+        return "redirect:/chat/"+ event.getId()+"?activeTab=participant";
+    }
 }

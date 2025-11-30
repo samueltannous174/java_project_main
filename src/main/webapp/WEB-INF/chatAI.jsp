@@ -90,47 +90,63 @@
 
         <div id="participantChat" class="flex-1 flex flex-col hidden">
             <div class="flex-1 overflow-y-auto p-6 space-y-4 scroll-smooth bg-gray-50">
-                <div class="chat-message flex items-start gap-3">
-                    <div class="flex-shrink-0">
-                        <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                            <i class="fas fa-user text-gray-700"></i>
-                        </div>
-                    </div>
+                <c:forEach var="message" items="${event.messages}">
+                    <c:choose>
+                        <c:when test="${message.user.id != logged.id && message.type == 2}" >
+                            <div class="chat-message flex items-start gap-3">
+                                <div class="flex-shrink-0">
+                                    <div class="w-10 h-10 bg-gray-300 rounded-full overflow-hidden flex items-center justify-center">
+                                        <img
+                                                class="w-full h-full object-cover"
+                                                src="${logged.image_url}"
+                                                alt="profile"
+                                        />
+                                    </div>
+                                </div>
 
-                    <div class="flex-1">
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="font-semibold text-gray-800">Participant 1</span>
-                            <span class="text-xs text-gray-500">2:40 PM</span>
-                        </div>
-                        <div class="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
-                            <p class="text-gray-700">
-                                Hi everyone! Does anyone know if we need gloves for this cleanup?
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="font-semibold text-gray-800">${message.user.firstname}</span>
+                                        <span class="text-xs text-gray-500">2:40 PM</span>
+                                    </div>
+                                    <div class="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
+                                        <p class="text-gray-700">
+                                            ${message.content}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:when>
 
-                <div class="chat-message flex items-start gap-3 justify-end">
-                    <div class="flex-1 flex flex-col items-end">
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="text-xs text-gray-500">2:42 PM</span>
-                            <span class="font-semibold text-gray-800">You</span>
-                        </div>
-                        <div class="bg-primary-purple text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-sm max-w-md">
-                            <p>Yes, I think gloves and a water bottle are recommended.</p>
-                        </div>
-                    </div>
-                    <div class="flex-shrink-0">
-                        <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                            <i class="fas fa-user text-gray-600"></i>
-                        </div>
-                    </div>
-                </div>
+                        <c:when test="${message.user.id == logged.id && message.type == 2}">
+                            <div class="chat-message flex items-start gap-3 justify-end">
+                                <div class="flex-1 flex flex-col items-end">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="font-semibold text-gray-800">You</span>
+                                    </div>
+                                    <div class="bg-primary-purple text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-sm max-w-md">
+                                        <p>${message.content}</p>
+                                    </div>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <div class="w-10 h-10 bg-gray-300 rounded-full overflow-hidden flex items-center justify-center">
+                                        <img
+                                                class="w-full h-full object-cover"
+                                                src="${logged.image_url}"
+                                                alt="profile"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </c:when>
+                    </c:choose>
+                </c:forEach>
             </div>
 
             <div class="border-t border-gray-200 bg-white p-4">
-                <form id="participantChatForm" class="flex gap-3">
+                <form id="participantChatForm" class="flex gap-3" method="post" action="/participant/message">
                     <input
+                            name="content"
                             type="text"
                             id="participantMessageInput"
                             placeholder="Send a message to other participants..."
@@ -138,6 +154,10 @@
                             autocomplete="off"
                             required
                     />
+                    <input type="hidden" name="user_id" value="${logged.id}">
+                    <input type="hidden" name="event_id" value="${event.id}">
+                    <input type="hidden" name="type" value="2">
+                    <input type="hidden" name="activeTab" value="participant">
                     <button
                             type="submit"
                             class="bg-primary-purple hover:bg-purple-900 text-white px-5 py-3 rounded-xl transition-all transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:ring-offset-2 shadow-lg">
@@ -249,7 +269,7 @@
                     <input type="hidden" name="user_id" value="${logged.id}">
                     <input type="hidden" name="event_id" value="${event.id}">
                     <input type="hidden" name="type" value="1">
-
+                    <input type="hidden" name="activeTab" value="ai">
                     <button
                             type="submit"
                             class="bg-primary-purple hover:bg-purple-900 text-white px-5 py-3 rounded-xl transition-all transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary-purple focus:ring-offset-2 shadow-lg">
@@ -296,6 +316,17 @@
     function sendMessage(e) {
         e.preventDefault();
     }
+
+    window.addEventListener("DOMContentLoaded", () => {
+        const params = new URLSearchParams(window.location.search);
+        const activeTab = params.get("activeTab");
+
+        if (activeTab === "participant") {
+            switchTab("participant");
+        } else if (activeTab === "ai") {
+            switchTab("ai");
+        }
+    });
 </script>
 
 </body>
