@@ -27,7 +27,6 @@ public class TestController {
         skillService.createSkill(new Skill("Communication"));
         skillService.createSkill(new Skill("Teamwork"));
         skillService.createSkill(new Skill("Planning"));
-
         skillService.createSkill( new Skill("Time Management"));
         skillService.createSkill(new Skill("Physical stamina"));
         skillService.createSkill(new Skill("Crowd management"));

@@ -73,7 +73,6 @@ public class MainController {
         }else if(title != null && category == null){
             allEvents = eventService.findByTitleContainsIgnoreCase(title);
         }
-
         int totalEvents = allEvents.size();
         int totalPages = (int) Math.ceil((double) totalEvents / pageSize);
 
@@ -209,8 +208,15 @@ public class MainController {
         User logged = userService.findUser(loggedId);
         model.addAttribute("logged", logged);
 
+
+        model.addAttribute("logged", logged);
+
+
         Event event= eventService.findById(id);
         model.addAttribute("event", event);
+        System.out.println(event.getOrganizer());
+        model.addAttribute("organizer", event.getOrganizer());
+
         model.addAttribute("outcomes", event.getOutcomes());
         model.addAttribute("skills", event.getSkills());
         model.addAttribute("tasks", event.getTasks());
@@ -227,8 +233,6 @@ public class MainController {
         if (loggedId == null) {
             return "redirect:/";
         }
-
-
 
         User logged = userService.findUser(loggedId);
         model.addAttribute("logged", logged);
