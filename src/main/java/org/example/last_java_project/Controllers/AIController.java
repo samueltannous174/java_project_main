@@ -23,7 +23,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/ai")
-public class AIController {
+public class  AIController {
 
     @Autowired
     private  AiService aiService;

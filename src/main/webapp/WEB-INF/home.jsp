@@ -1,12 +1,17 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<fmt:setBundle basename="messages"/>
+<fmt:setLocale value="${pageContext.request.locale}" />
+<c:set var="currentLang" value="${pageContext.request.locale.language}" />
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${currentLang}" dir="${currentLang == 'ar' ? 'rtl' : 'ltr'}">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><fmt:setLocale value="${title}" scope="session"/></title>
+    <title><fmt:message key="app.title.home"/></title>
 
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -43,36 +48,49 @@
     <div class="flex justify-between items-center w-full">
         <div class="flex items-center">
             <span class="ml-3 text-2xl font-extrabold text-primary-purple tracking-tight">
-                Voluntree
+                <fmt:message key="app.brand"/>
             </span>
         </div>
 
         <div class="hidden sm:flex space-x-8">
             <a href="/"
                class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
-                Home
+                <fmt:message key="nav.home"/>
             </a>
             <a href="/events"
                class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
-                Events
+                <fmt:message key="nav.events"/>
             </a>
             <a href="/profile/${id}"
                class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
-                My Profile
+                <fmt:message key="nav.myProfile"/>
             </a>
 
             <c:if test="${logged.role == 'ORGANIZER'}">
                 <a href="/create"
                    class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
-                    New Event
+                    <fmt:message key="nav.newEvent"/>
                 </a>
             </c:if>
         </div>
 
-        <form class="hidden sm:flex" action="/logout" method="post">
-            <input type="submit" value="Logout"
-                   class="ml-4 px-4 py-2 text-sm font-medium text-primary-purple/80 bg-background-white border border-primary-purple/20 rounded-md hover:bg-red-500 hover:text-white duration-150 flex items-center">
-        </form>
+        <div class="hidden sm:flex items-center gap-4">
+            <div class="flex items-center gap-2 text-sm">
+                <a href="?lang=en"
+                   class="px-2 py-1 rounded-full border border-primary-purple/30 text-primary-purple/80 hover:bg-primary-purple hover:text-white transition">
+                    EN
+                </a>
+                <a href="?lang=ar"
+                   class="px-2 py-1 rounded-full border border-primary-purple/30 text-primary-purple/80 hover:bg-primary-purple hover:text-white transition">
+                    AR
+                </a>
+            </div>
+
+            <form action="/logout" method="post">
+                <input type="submit" value="<fmt:message key='nav.logout'/>"
+                       class="ml-4 px-4 py-2 text-sm font-medium text-primary-purple/80 bg-background-white border border-primary-purple/20 rounded-md hover:bg-red-500 hover:text-white duration-150 flex items-center">
+            </form>
+        </div>
     </div>
 </nav>
 
@@ -80,28 +98,27 @@
     <div class="w-full lg:w-1/2 p-8 sm:p-10 lg:p-14 flex flex-col justify-center space-y-8">
         <div class="inline-flex items-center rounded-full bg-secondary-orange/10 border border-secondary-orange/40 px-3 py-1 w-fit">
             <span class="text-xs font-semibold text-secondary-orange tracking-wide">
-                Welcome to Voluntree
+                <fmt:message key="home.badge.welcome"/>
             </span>
         </div>
 
         <div class="space-y-3">
             <h1 class="text-4xl sm:text-5xl font-extrabold text-primary-purple leading-tight">
-                Events
+                <fmt:message key="home.hero.title"/>
             </h1>
             <h2 class="text-2xl sm:text-3xl font-semibold text-primary-purple/80">
-                Connect, Volunteer, and Grow Together
+                <fmt:message key="home.hero.subtitle"/>
             </h2>
         </div>
 
         <p class="text-lg text-primary-purple/70 max-w-xl leading-relaxed">
-            Join our community of passionate volunteers. Discover meaningful opportunities,
-            develop new skills, and make a lasting impact in your community.
+            <fmt:message key="home.hero.description"/>
         </p>
 
         <a href="/events"
            class="flex items-center justify-center px-8 py-3 text-lg font-semibold text-background-white rounded-xl shadow-lg
                   bg-gradient-to-r from-primary-purple to-secondary-orange hover:from-secondary-orange hover:to-primary-purple w-fit">
-            Explore Events
+            <fmt:message key="home.hero.button.exploreEvents"/>
             <i class="fas fa-arrow-right ml-2"></i>
         </a>
 
@@ -112,7 +129,9 @@
                 </div>
                 <div class="ml-3">
                     <p class="text-2xl font-bold text-primary-purple">${fn:length(users)}+</p>
-                    <p class="text-sm text-primary-purple/60">Users</p>
+                    <p class="text-sm text-primary-purple/60">
+                        <fmt:message key="home.stats.users.label"/>
+                    </p>
                 </div>
             </div>
 
@@ -122,7 +141,9 @@
                 </div>
                 <div class="ml-3">
                     <p class="text-2xl font-bold text-primary-purple">${fn:length(events)}</p>
-                    <p class="text-sm text-primary-purple/60">Events</p>
+                    <p class="text-sm text-primary-purple/60">
+                        <fmt:message key="home.stats.events.label"/>
+                    </p>
                 </div>
             </div>
 
@@ -132,7 +153,9 @@
                 </div>
                 <div class="ml-3">
                     <p class="text-2xl font-bold text-primary-purple">${fn:length(volunteers)}</p>
-                    <p class="text-sm text-primary-purple/60">Volunteers</p>
+                    <p class="text-sm text-primary-purple/60">
+                        <fmt:message key="home.stats.volunteers.label"/>
+                    </p>
                 </div>
             </div>
         </div>
@@ -146,7 +169,7 @@
         <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-black/10 to-transparent"></div>
 
         <div class="absolute bottom-4 left-4 bg-black/40 text-background-white px-4 py-2 rounded-lg text-sm max-w-[80%] hidden sm:block">
-            Join live events, meet new people, and contribute to causes you care about.
+            <fmt:message key="home.banner.text"/>
         </div>
     </div>
 </div>

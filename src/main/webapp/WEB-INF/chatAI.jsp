@@ -1,13 +1,18 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<fmt:setBundle basename="messages"/>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<fmt:setBundle basename="messages"/>
+<fmt:setLocale value="${pageContext.request.locale}" />
+<c:set var="currentLang" value="${pageContext.request.locale.language}" />
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${currentLang}" dir="${currentLang == 'ar' ? 'rtl' : 'ltr'}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><fmt:message key="app.title.eventCommunications"/></title>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -33,41 +38,55 @@
     <div class="flex justify-between items-center w-full">
         <div class="flex items-center">
             <span class="ml-3 text-2xl font-extrabold text-primary-purple tracking-tight">
-                Voluntree
+                <fmt:message key="app.brand"/>
             </span>
         </div>
 
         <div class="hidden sm:flex space-x-8">
             <a href="/"
                class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
-                Home
+                <fmt:message key="nav.home"/>
             </a>
             <a href="/events"
                class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
-                Events
+                <fmt:message key="nav.events"/>
             </a>
             <a href="/profile/${id}"
                class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
-                My Profile
+                <fmt:message key="nav.myProfile"/>
             </a>
 
             <c:if test="${logged.role == 'ORGANIZER'}">
                 <a href="/create"
                    class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
-                    New Event
+                    <fmt:message key="nav.newEvent"/>
                 </a>
             </c:if>
         </div>
 
-        <form class="hidden sm:flex" action="/logout" method="post">
-            <input type="submit" value="Logout"
-                   class="ml-4 px-4 py-2 text-sm font-medium text-primary-purple/80 bg-background-white border border-primary-purple/20 rounded-md hover:bg-red-500 hover:text-white duration-150 flex items-center">
-        </form>
+        <div class="flex items-center gap-4">
+            <div class="hidden sm:flex items-center gap-2 text-sm">
+                <a href="?lang=en"
+                   class="px-2 py-1 rounded-full border border-primary-purple/30 text-primary-purple/80 hover:bg-primary-purple hover:text-white transition">
+                    EN
+                </a>
+                <a href="?lang=ar"
+                   class="px-2 py-1 rounded-full border border-primary-purple/30 text-primary-purple/80 hover:bg-primary-purple hover:text-white transition">
+                    AR
+                </a>
+            </div>
+
+            <form class="hidden sm:flex" action="/logout" method="post">
+                <input type="submit"
+                       value="<fmt:message key='nav.logout'/>"
+                       class="ml-4 px-4 py-2 text-sm font-medium text-primary-purple/80 bg-background-white border border-primary-purple/20 rounded-md hover:bg-red-500 hover:text-white duration-150 flex items-center">
+            </form>
+        </div>
     </div>
 </nav>
 
 <div class="max-w-5xl mx-auto px-4 py-8">
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden  flex flex-col">
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col">
         <div class="border-b border-gray-200">
             <div class="flex">
                 <button type="button"
@@ -75,7 +94,7 @@
                         id="participantTab"
                         class="flex-1 px-6 py-4 text-center font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 transition-colors border-b-2 border-transparent">
                     <i class="fas fa-users mr-2"></i>
-                    Participant Chat
+                    <fmt:message key="chat.participantTab"/>
                 </button>
 
                 <button type="button"
@@ -83,11 +102,12 @@
                         id="aiTab"
                         class="flex-1 px-6 py-4 text-center font-medium text-primary-purple bg-gray-50 transition-colors border-b-2 border-primary-purple">
                     <i class="fas fa-robot mr-2"></i>
-                    AI Assistant
+                    <fmt:message key="chat.aiTab"/>
                 </button>
             </div>
         </div>
 
+        <!-- Participant Chat -->
         <div id="participantChat" class="flex-1 flex flex-col hidden">
             <div class="flex-1 overflow-y-auto p-6 space-y-4 scroll-smooth bg-gray-50">
                 <c:forEach var="message" items="${event.messages}">
@@ -107,11 +127,10 @@
                                 <div class="flex-1">
                                     <div class="flex items-center gap-2 mb-1">
                                         <span class="font-semibold text-gray-800">${message.user.firstname}</span>
-                                        <span class="text-xs text-gray-500">2:40 PM</span>
                                     </div>
                                     <div class="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
                                         <p class="text-gray-700">
-                                            ${message.content}
+                                                ${message.content}
                                         </p>
                                     </div>
                                 </div>
@@ -122,7 +141,9 @@
                             <div class="chat-message flex items-start gap-3 justify-end">
                                 <div class="flex-1 flex flex-col items-end">
                                     <div class="flex items-center gap-2 mb-1">
-                                        <span class="font-semibold text-gray-800">You</span>
+                                        <span class="font-semibold text-gray-800">
+                                            <fmt:message key="chat.you"/>
+                                        </span>
                                     </div>
                                     <div class="bg-primary-purple text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-sm max-w-md">
                                         <p>${message.content}</p>
@@ -149,7 +170,7 @@
                             name="content"
                             type="text"
                             id="participantMessageInput"
-                            placeholder="Send a message to other participants..."
+                            placeholder="<fmt:message key='chat.participant.inputPlaceholder'/>"
                             class="flex-1 px-4 py-3 bg-gray-100 border-none rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-purple transition-all"
                             autocomplete="off"
                             required
@@ -167,6 +188,7 @@
             </div>
         </div>
 
+        <!-- AI Chat -->
         <div id="aiChat" class="flex-1 flex flex-col">
             <div id="aiMessagesContainer"
                  class="flex-1 scroll-smooth p-6 space-y-4 overflow-y-visible bg-gray-50">
@@ -180,18 +202,15 @@
 
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-1">
-                            <span class="font-semibold text-gray-800">AI Assistant</span>
-                            <span class="text-xs text-gray-500">2:51 PM</span>
+                            <span class="font-semibold text-gray-800">
+                                <fmt:message key="chat.aiAssistantName"/>
+                            </span>
                         </div>
                         <div class="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
                             <p class="text-gray-700">
-                                Hello! I'm here to help answer any questions about this event.
-                                Feel free to ask me about tasks, required materials, or anything else!
+                                <fmt:message key="chat.ai.intro"/>
                             </p>
                         </div>
-
-
-
 
                         <c:forEach var="message" items="${event.messages}">
                             <c:choose>
@@ -206,13 +225,12 @@
                                 <c:when test="${message.user.id == logged.id && message.type == 1}">
                                     <div class="flex-1 flex flex-col items-end">
                                         <div class="flex items-center gap-2 mb-1">
-                                            <span class="text-xs text-gray-500">2:42 PM</span>
-                                            <span class="font-semibold text-gray-800">You</span>
+                                            <span class="font-semibold text-gray-800">
+                                                <fmt:message key="chat.you"/>
+                                            </span>
                                         </div>
                                         <div class="bg-primary-purple text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-sm max-w-md">
-                                            <p>
-                                                    ${message.content}
-                                            </p>
+                                            <p>${message.content}</p>
                                         </div>
                                     </div>
                                 </c:when>
@@ -224,12 +242,9 @@
                                             <span class="font-semibold text-gray-800">${message.user.firstname}</span>
                                         </div>
                                         <div class="bg-orange-200 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-sm max-w-md">
-                                            <p>
-                                                    ${message.content}
-                                            </p>
+                                            <p>${message.content}</p>
                                         </div>
                                     </div>
-
                                 </c:when>
                             </c:choose>
                         </c:forEach>
@@ -260,7 +275,7 @@
                             type="text"
                             name="content"
                             id="aiMessageInput"
-                            placeholder="Ask the AI assistant..."
+                            placeholder="<fmt:message key='chat.ai.inputPlaceholder'/>"
                             class="flex-1 px-4 py-3 bg-gray-100 border-none rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-purple transition-all"
                             autocomplete="off"
                             required
@@ -313,6 +328,7 @@
             participantChat.classList.remove('flex');
         }
     }
+
     function sendMessage(e) {
         e.preventDefault();
     }

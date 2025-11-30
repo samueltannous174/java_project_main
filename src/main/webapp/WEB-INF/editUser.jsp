@@ -56,28 +56,24 @@
 
         <input type="hidden" name="id" value="${user.id}" />
 
-        <!-- FIRST NAME -->
         <label class="block mb-2 font-semibold">First Name</label>
         <input type="text"
                name="firstname"
                value="${user.firstname}"
                class="w-full px-4 py-3 bg-gray-100 rounded-xl mb-4" />
 
-        <!-- LAST NAME -->
         <label class="block mb-2 font-semibold">Last Name</label>
         <input type="text"
                name="lastname"
                value="${user.lastname}"
                class="w-full px-4 py-3 bg-gray-100 rounded-xl mb-4" />
 
-        <!-- IMAGE URL -->
         <label class="block mb-2 font-semibold">Image URL</label>
         <input type="text"
                name="image_url"
                value="${user.image_url}"
                class="w-full px-4 py-3 bg-gray-100 rounded-xl mb-4" />
 
-        <!-- ROLE -->
         <label class="block mb-2 font-semibold">Role</label>
         <select name="role"
                 class="w-full px-4 py-3 bg-gray-100 rounded-xl mb-4">
