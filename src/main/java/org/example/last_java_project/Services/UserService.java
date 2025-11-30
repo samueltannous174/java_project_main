@@ -25,6 +25,17 @@ public class UserService {
     public void save(User user){
         userRepository.save(user);
     }
+    public List<User> findAll(){
+        return (List<User>) userRepository.findAll();
+    }
+    public void promoteToOrganizer(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setRole("ORGANIZER");
+        userRepository.save(user);
+    }
+
     public User register(User newUser, BindingResult result) {
 
         System.out.println(newUser);

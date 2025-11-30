@@ -41,6 +41,9 @@ public class Task {
     @JoinColumn(name = "event_id")
     private Event event;
 
+    public Task(String prepareOliveHarvest, Event event) {
+    }
+
     @PrePersist
     protected void onCreate(){
         this.createdAt = new Date();

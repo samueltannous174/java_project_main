@@ -62,7 +62,7 @@
             <c:if test="${logged.role == 'ORGANIZER'}">
                 <a href="/create"
                    class="border-b-2 border-transparent text-primary-purple hover:border-secondary-orange hover:text-primary-purple px-1 pt-1 text-2xl font-bold">
-                    new Event
+                    New Event
                 </a>
             </c:if>
         </div>
