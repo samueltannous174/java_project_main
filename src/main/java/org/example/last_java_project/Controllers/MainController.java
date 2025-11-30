@@ -46,7 +46,11 @@ public class MainController {
             return "redirect:/login";
         }
 
+
         User logged = userService.findUser(loggedId);
+        model.addAttribute("users", userService.findAll());
+        model.addAttribute("events", eventService.findAll());
+        model.addAttribute("volunteers", userService.getVolunteers());
         model.addAttribute("logged",logged);
 
         return "home";
@@ -91,6 +95,7 @@ public class MainController {
         User logged = userService.findUser(loggedId);
         model.addAttribute("logged", logged);
         model.addAttribute("categories", eventService.getUniqueCategories());
+        model.addAttribute("category", category);
         model.addAttribute("allEvents", allEvents);
         model.addAttribute("events", eventsPage);
         model.addAttribute("currentPage", page);

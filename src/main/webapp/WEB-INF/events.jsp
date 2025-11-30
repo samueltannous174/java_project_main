@@ -82,7 +82,9 @@
 <div class="w-full px-4 sm:px-10 lg:px-20 xl:px-32 py-12">
 
     <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-        <div class="w-full lg:w-1/2">
+
+        <!-- Search Bar (2/3 width on large screens) -->
+        <div class="w-full lg:w-2/3">
             <form action="/events" method="get" class="relative w-full">
                 <button type="submit"
                         class="absolute left-3.5 top-1/2 -translate-y-1/2 text-primary-purple/40
@@ -93,32 +95,33 @@
                 <input
                         type="text"
                         name="search"
+                        value="${fn:escapeXml(currentSearch)}"
                         placeholder="Search events, organizers, or keywords... (leave it empty to get all events)"
                         class="w-full rounded-full border border-primary-purple/20 bg-background-white
-               py-3 pl-11 pr-5 text-lg shadow-sm
-               focus:border-primary-purple focus:outline-none focus:ring-1 focus:ring-primary-purple"
+                   py-3 pl-11 pr-5 text-lg shadow-sm
+                   focus:border-primary-purple focus:outline-none focus:ring-1 focus:ring-primary-purple"
                 />
             </form>
         </div>
 
-        <div class="flex w-full lg:w-1/2 gap-4">
-            <select class="w-1/3 rounded-full border border-primary-purple/20 bg-background-white px-4 py-2.5 text-sm shadow-sm focus:border-primary-purple focus:outline-none focus:ring-1 focus:ring-primary-purple"
-                    onchange="if (this.value) window.location.href = '/events?category='+encodeURIComponent(this.value);">\
+        <!-- Category Select (1/3 width on large screens) -->
+        <div class="w-full lg:w-1/3">
+            <select
+                    class="w-full rounded-full border border-primary-purple/20 h-14 bg-background-white
+                       px-4 py-2.5 text-sm shadow-sm focus:border-primary-purple
+                       focus:outline-none focus:ring-1 focus:ring-primary-purple"
+                    onchange="if (this.value) window.location.href = '/events?category='+encodeURIComponent(this.value);">
+
                 <option disabled selected>Category</option>
+
                 <c:forEach var="category" items="${categories}">
-                    <option >${category}</option>
+                    <option>${category}</option>
                 </c:forEach>
             </select>
-
-            <select class="w-1/3 rounded-full border border-primary-purple/20 bg-background-white px-4 py-2.5 text-sm shadow-sm focus:border-primary-purple focus:outline-none focus:ring-1 focus:ring-primary-purple">
-                <option>All Skills</option>
-            </select>
-
-            <select class="w-1/3 rounded-full border border-primary-purple/20 bg-background-white px-4 py-2.5 text-sm shadow-sm focus:border-primary-purple focus:outline-none focus:ring-1 focus:ring-primary-purple">
-                <option>Date</option>
-            </select>
         </div>
+
     </div>
+
 
     <div class="mt-8 flex items-center justify-between">
         <h2 class="text-3xl font-semibold">All Events</h2>
@@ -132,14 +135,10 @@
                class=" px-4 text-center rounded-full bg-orange-300 py-3 text-base font-semibold text-white hover:bg-secondary-orange">
                 Create Event Using Ai
             </a>
-
         </div>
-
-
     </div>
 
     <div class="mt-8 grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-
         <c:if test="${fn:length(events) == 0}">
             <p class="mt-8 text-lg text-primary-purple/60">
                 No events yet.
@@ -190,31 +189,91 @@
         </c:if>
     </div>
 
+<%--    <div class="flex justify-center mt-10 gap-3">--%>
+<%--        <c:if test="${currentPage > 0}">--%>
+<%--            <a href="?page=${currentPage - 1}"--%>
+<%--               class="px-4 py-2 bg-primary-purple text-white rounded-lg hover:bg-primary-purple/80">--%>
+<%--                Previous--%>
+<%--            </a>--%>
+<%--        </c:if>--%>
+<%--        <c:forEach begin="0" end="${totalPages - 1}" var="i">--%>
+<%--            <a href="?page=${i}"--%>
+<%--               class="px-4 py-2 rounded-lg--%>
+<%--           ${i == currentPage ? 'bg-primary-purple text-white' : 'bg-gray-200 text-primary-purple'}">--%>
+<%--                    ${i + 1}--%>
+<%--            </a>--%>
+<%--        </c:forEach>--%>
+<%--        <c:if test="${currentPage < totalPages - 1}">--%>
+<%--            <a href="?page=${currentPage + 1}"--%>
+<%--               class="px-4 py-2 bg-primary-purple text-white rounded-lg hover:bg-primary-purple/80">--%>
+<%--                Next--%>
+<%--            </a>--%>
+<%--        </c:if>--%>
+<%--    </div>--%>
+
+    <c:set var="currentSearch" value="${param.search}" />
+    <c:set var="currentCategory" value="${param.category}" />
+
     <div class="flex justify-center mt-10 gap-3">
 
+        <!-- Previous -->
         <c:if test="${currentPage > 0}">
-            <a href="?page=${currentPage - 1}"
-               class="px-4 py-2 bg-primary-purple text-white rounded-lg hover:bg-primary-purple/80">
+            <c:url var="prevUrl" value="/events">
+                <c:param name="page" value="${currentPage - 1}" />
+                <c:if test="${not empty currentSearch}">
+                    <c:param name="search" value="${currentSearch}" />
+                </c:if>
+                <c:if test="${not empty currentCategory}">
+                    <c:param name="category" value="${currentCategory}" />
+                </c:if>
+            </c:url>
+
+            <a href="${prevUrl}" class="px-4 py-2 bg-primary-purple text-white rounded-lg hover:bg-primary-purple/80">
                 Previous
             </a>
         </c:if>
 
+
+        <!-- Page Numbers -->
         <c:forEach begin="0" end="${totalPages - 1}" var="i">
-            <a href="?page=${i}"
+            <c:url var="pageUrl" value="/events">
+                <c:param name="page" value="${i}" />
+                <c:if test="${not empty currentSearch}">
+                    <c:param name="search" value="${currentSearch}" />
+                </c:if>
+                <c:if test="${not empty currentCategory}">
+                    <c:param name="category" value="${currentCategory}" />
+                </c:if>
+            </c:url>
+
+            <a href="${pageUrl}"
                class="px-4 py-2 rounded-lg
            ${i == currentPage ? 'bg-primary-purple text-white' : 'bg-gray-200 text-primary-purple'}">
                     ${i + 1}
             </a>
         </c:forEach>
 
+
+        <!-- Next -->
         <c:if test="${currentPage < totalPages - 1}">
-            <a href="?page=${currentPage + 1}"
-               class="px-4 py-2 bg-primary-purple text-white rounded-lg hover:bg-primary-purple/80">
+            <c:url var="nextUrl" value="/events">
+                <c:param name="page" value="${currentPage + 1}" />
+                <c:if test="${not empty currentSearch}">
+                    <c:param name="search" value="${currentSearch}" />
+                </c:if>
+                <c:if test="${not empty currentCategory}">
+                    <c:param name="category" value="${currentCategory}" />
+                </c:if>
+            </c:url>
+
+            <a href="${nextUrl}" class="px-4 py-2 bg-primary-purple text-white rounded-lg hover:bg-primary-purple/80">
                 Next
             </a>
         </c:if>
 
     </div>
+
+
 </div>
 
 </body>

@@ -78,13 +78,11 @@
     </div>
 </nav>
 
-<!-- MAIN WRAPPER -->
 <main class="flex-1 flex justify-center items-start py-6">
 
     <div class="w-[65%] mx-auto space-y-8 overflow-auto pb-10">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-            <!-- PROFILE -->
             <section class="lg:col-span-2 bg-background-white border border-primary-purple/10 rounded-2xl shadow-sm p-8 space-y-7">
                 <div class="flex flex-col md:flex-row md:items-center gap-6">
                     <div class="flex-shrink-0">
@@ -115,11 +113,7 @@
                                         Get Certification
                                     </button>
                                 </form>
-
-
-
                             </div>
-
                         </div>
 
                         <div class="inline-flex items-center rounded-full bg-secondary-orange/10 border border-secondary-orange/40 px-3 py-1.5">
@@ -131,12 +125,10 @@
                     </div>
                 </div>
 
-                <!-- STATS -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-5 border-t border-primary-purple/10">
                     <div class="rounded-xl border border-primary-purple/10 px-5 py-4">
                         <p class="text-sm text-primary-purple/60">Events Attended</p>
 
-                        <!-- FIXED COUNT -->
                         <c:set var="count" value="${fn:length(logged.events)}"/>
                         <p class="text-3xl font-bold text-primary-purple">${count}</p>
                     </div>
