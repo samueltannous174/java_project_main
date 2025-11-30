@@ -104,10 +104,6 @@
                         <form:password path="password" id="password"
                                        class="w-full pl-12 pr-12 py-3 bg-gray-50 border-none rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-purple transition-all"
                                        required="required"/>
-                        <button type="button" onclick="togglePassword()"
-                                class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                            <i class="fas fa-eye" id="togglePasswordIcon"></i>
-                        </button>
                     </div>
                     <form:errors path="password" cssClass="text-red-500 text-sm mt-1" />
                 </div>

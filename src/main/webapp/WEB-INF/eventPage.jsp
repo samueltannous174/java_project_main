@@ -68,6 +68,7 @@
 <main class="max-w-6xl mx-auto px-4 pb-12">
 
     <section class="relative w-full sm:h-[400px] h-[300px] rounded-xl overflow-hidden bg-gray-200 shadow">
+
         <img
                 src="${event.image_url}"
                 alt="Event image"
@@ -95,7 +96,30 @@
 
     </section>
 
-    <a class="w-full bg-primary-purple mt-1 text-white  rounded-lg   " href="/chat/${event.id}">
+
+
+    <div class="mt-4 p-4 bg-white w-1/4 shadow-md rounded-lg flex items-center gap-3">
+
+        <img src="${organizer.image_url}" class="w-12 h-12 rounded-full bg-primary-purple text-white flex items-center justify-center text-lg font-semibold"/>
+
+        <div>
+            <p class="text-sm text-gray-500">Organizer</p>
+            <p class="text-lg font-semibold text-gray-800">
+                ${organizer.firstname} ${organizer.lastname}
+            </p>
+        </div>
+
+
+    </div>
+
+
+
+    <a
+            href="/chat/${event.id}"
+            class="w-1/4 bg-primary-purple text-white py-3 rounded-lg mt-2
+           flex items-center justify-center font-semibold
+           hover:bg-secondary-orange transition duration-200"
+    >
         Chats
     </a>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-10">
@@ -152,7 +176,15 @@
                 <div class="w-full bg-gray-200 h-2 rounded-full mt-2">
                     <div class="h-2 bg-primary-purple rounded-full" style="width: 32%;"></div>
                 </div>
-                <c:if test="${ fn:contains(event.users, logged.id)}">
+
+                <c:set var="isJoined" value="false" />
+                <c:forEach var="u" items="${event.users}">
+                    <c:if test="${u.id == logged.id}">
+                        <c:set var="isJoined" value="true" />
+                    </c:if>
+                </c:forEach>
+
+                <c:if test="${isJoined}">
                     <form action="/remove_user_to_event" method="post">
                         <input name="event_id" type="hidden" value="${event.id}">
                         <button class="w-full bg-primary-purple text-white py-2 rounded-lg mt-4 hover:bg-secondary-orange transition font-semibold">
@@ -164,8 +196,7 @@
                     </form>
                 </c:if>
 
-
-                <c:if test="${not fn:contains(event.users, logged.id)}">
+                <c:if test="${not isJoined}">
                     <form action="/add_user_to_event" method="post">
                         <input name="event_id" type="hidden" value="${event.id}">
                         <button class="w-full bg-primary-purple text-white py-2 rounded-lg mt-4 hover:bg-secondary-orange transition font-semibold">
@@ -174,10 +205,6 @@
 
                     </form>
                 </c:if>
-
-
-
-
             </div>
 
             <div class="bg-background-white p-6 rounded-xl shadow border">
@@ -194,6 +221,9 @@
                     Don’t have all the skills? No problem! Many can be learned during the event.
                 </p>
             </div>
+
+
+
 
         </div>
     </div>

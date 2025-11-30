@@ -175,7 +175,7 @@
 
                         <c:forEach var="message" items="${event.messages}">
                             <c:choose>
-                                <c:when test="${message.user.id == 9}">
+                                <c:when test="${message.user.id == 9 && message.type == 1}">
                                     <div class="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
                                         <p class="text-gray-700">
                                                 ${message.content}
@@ -183,7 +183,7 @@
                                     </div>
                                 </c:when>
 
-                                <c:when test="${message.user.id == logged.id}">
+                                <c:when test="${message.user.id == logged.id && message.type == 1}">
                                     <div class="flex-1 flex flex-col items-end">
                                         <div class="flex items-center gap-2 mb-1">
                                             <span class="text-xs text-gray-500">2:42 PM</span>
@@ -197,7 +197,7 @@
                                     </div>
                                 </c:when>
 
-                                <c:otherwise>
+                                <c:when test="${message.user.id != 9 && message.user.id != logged.id && message.type == 1}">
                                     <div class="flex-1 flex flex-col items-end">
                                         <div class="flex items-center gap-2 mb-1">
                                             <span class="text-xs text-gray-500">2:42 PM</span>
@@ -210,7 +210,7 @@
                                         </div>
                                     </div>
 
-                                </c:otherwise>
+                                </c:when>
                             </c:choose>
                         </c:forEach>
                     </div>
