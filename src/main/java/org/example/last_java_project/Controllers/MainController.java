@@ -46,34 +46,93 @@ public class MainController {
             return "redirect:/login";
         }
 
-        User logged = userService.findUser(loggedId);
 
+        User logged = userService.findUser(loggedId);
+        model.addAttribute("users", userService.findAll());
+        model.addAttribute("events", eventService.findAll());
+        model.addAttribute("volunteers", userService.getVolunteers());
         model.addAttribute("logged",logged);
 
         return "home";
     }
 
+//    @GetMapping("/events")
+//    public String showEvents(Model model,
+//                             @RequestParam(value = "search", required = false) String title,
+//                             @RequestParam(value = "page", defaultValue = "0") int page,
+//                             @RequestParam(value = "category", required = false)String category,
+//                             HttpSession session) {
+//
+//        Long loggedId = (Long) session.getAttribute("id");
+//        if (loggedId == null){
+//            return "redirect:/login";
+//        }
+//
+//        int pageSize = 8;
+//        List<Event> allEvents = List.of();
+//        if(title == null && category == null){
+//            allEvents = eventService.findAll();
+//        }else if(title == null && category != null){
+//            allEvents = eventService.getEventsByCategory(category);
+//        }else if(title != null && category == null){
+//            allEvents = eventService.findByTitleContainsIgnoreCase(title);
+//        }
+//        int totalEvents = allEvents.size();
+//        int totalPages = (int) Math.ceil((double) totalEvents / pageSize);
+//
+//        if (page < 0) page = 0;
+//        if (totalPages > 0 && page >= totalPages) page = totalPages - 1;
+//
+//        int start = page * pageSize;
+//        int end = Math.min(start + pageSize, totalEvents);
+//        List<Event> eventsPage;
+//
+//        if (totalEvents == 0) {
+//            eventsPage = List.of();
+//        } else {
+//            eventsPage = allEvents.subList(start, end);
+//        }
+//        User logged = userService.findUser(loggedId);
+//        model.addAttribute("logged", logged);
+//        model.addAttribute("categories", eventService.getUniqueCategories());
+//        model.addAttribute("allEvents", allEvents);
+//        model.addAttribute("events", eventsPage);
+//        model.addAttribute("currentPage", page);
+//        model.addAttribute("totalPages", totalPages);
+//        model.addAttribute("search", title);
+//        return "events";
+//    }
+
     @GetMapping("/events")
     public String showEvents(Model model,
-                             @RequestParam(value = "search", required = false) String title,
+                             @RequestParam(value = "search", required = false) String search,
                              @RequestParam(value = "page", defaultValue = "0") int page,
-                             @RequestParam(value = "category", required = false)String category,
+                             @RequestParam(value = "category", required = false) String category,
                              HttpSession session) {
 
         Long loggedId = (Long) session.getAttribute("id");
-        if (loggedId == null){
+        if (loggedId == null) {
             return "redirect:/login";
         }
 
         int pageSize = 8;
-        List<Event> allEvents = List.of();
-        if(title == null && category == null){
-            allEvents = eventService.findAll();
-        }else if(title == null && category != null){
-            allEvents = eventService.getEventsByCategory(category);
-        }else if(title != null && category == null){
-            allEvents = eventService.findByTitleContainsIgnoreCase(title);
+
+        // Start from all events, then filter in-memory (simple + supports all combinations)
+        List<Event> allEvents = eventService.findAll();
+
+        if (category != null && !category.isBlank()) {
+            allEvents = allEvents.stream()
+                    .filter(e -> category.equalsIgnoreCase(e.getCategory()))
+                    .toList();
         }
+
+        if (search != null && !search.isBlank()) {
+            String lower = search.toLowerCase();
+            allEvents = allEvents.stream()
+                    .filter(e -> e.getTitle() != null && e.getTitle().toLowerCase().contains(lower))
+                    .toList();
+        }
+
         int totalEvents = allEvents.size();
         int totalPages = (int) Math.ceil((double) totalEvents / pageSize);
 
@@ -82,29 +141,31 @@ public class MainController {
 
         int start = page * pageSize;
         int end = Math.min(start + pageSize, totalEvents);
-        List<Event> eventsPage;
 
-        if (totalEvents == 0) {
-            eventsPage = List.of();
-        } else {
-            eventsPage = allEvents.subList(start, end);
-        }
+        List<Event> eventsPage = (totalEvents == 0) ? List.of() : allEvents.subList(start, end);
+
         User logged = userService.findUser(loggedId);
+
         model.addAttribute("logged", logged);
         model.addAttribute("categories", eventService.getUniqueCategories());
+        model.addAttribute("category", category);
         model.addAttribute("allEvents", allEvents);
         model.addAttribute("events", eventsPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
-        model.addAttribute("search", title);
-        return "events";
+        model.addAttribute("search", search);
+        model.addAttribute("id", loggedId); // for profile link
+
+        return "events"; // /WEB-INF/events.jsp
     }
+
 
     @GetMapping("/login")
     public String showAuth(
             @ModelAttribute("user") LoginUser user,
             HttpSession session,
             Model model) {
+//        session.invalidate();
         Long loggedId = (Long) session.getAttribute("id");
 
         if (loggedId != null) {
@@ -170,8 +231,6 @@ public class MainController {
             return "login";
         }
 
-
-
         User loggedUser=userService.login(user, result);
 
         if(result.hasErrors()){
@@ -179,9 +238,6 @@ public class MainController {
         }
         if (session.getAttribute("id") == null){
             session.setAttribute("id", loggedUser.getId());
-        }
-        if (loggedUser.getRole().equals("ADMIN")){
-            return  "redirect:/admin";
         }
         return "redirect:/";
     }
@@ -399,7 +455,7 @@ public class MainController {
         System.out.println(chatMessage);
         messageService.save(chatMessage);
 
-      String response = aiService.sendVolunteerHelp(content);
+      String response = aiService.sendPrompt(content);
 
         ChatMessage chatMessage2 = new ChatMessage(response, type);
         chatMessage2.setEvent(event);
@@ -425,6 +481,8 @@ public class MainController {
         User user = userService.findUser(user_id);
         chatMessage.setUser(user);
         messageService.save(chatMessage);
+
+        System.out.println(chatMessage.getContent()+" by "+user.getFirstname());
 
         return "redirect:/chat/"+ event.getId()+"?activeTab=participant";
     }

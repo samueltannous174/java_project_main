@@ -114,11 +114,7 @@
                                         Get Certification
                                     </button>
                                 </form>
-
-
-
                             </div>
-
                         </div>
 
                         <div class="inline-flex items-center rounded-full bg-secondary-orange/10 border border-secondary-orange/40 px-3 py-1.5">

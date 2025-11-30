@@ -1,10 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voluntree - Home</title>
+    <title><fmt:setLocale value="${title}" scope="session"/></title>
 
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -109,7 +111,7 @@
                     <i class="fas fa-users"></i>
                 </div>
                 <div class="ml-3">
-                    <p class="text-2xl font-bold text-primary-purple">3+</p>
+                    <p class="text-2xl font-bold text-primary-purple">${fn:length(users)}+</p>
                     <p class="text-sm text-primary-purple/60">Users</p>
                 </div>
             </div>
@@ -119,7 +121,7 @@
                     <i class="fas fa-calendar-alt"></i>
                 </div>
                 <div class="ml-3">
-                    <p class="text-2xl font-bold text-primary-purple">12</p>
+                    <p class="text-2xl font-bold text-primary-purple">${fn:length(events)}</p>
                     <p class="text-sm text-primary-purple/60">Events</p>
                 </div>
             </div>
@@ -129,7 +131,7 @@
                     <i class="fas fa-hands-helping"></i>
                 </div>
                 <div class="ml-3">
-                    <p class="text-2xl font-bold text-primary-purple">5</p>
+                    <p class="text-2xl font-bold text-primary-purple">${fn:length(volunteers)}</p>
                     <p class="text-sm text-primary-purple/60">Volunteers</p>
                 </div>
             </div>

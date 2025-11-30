@@ -25,9 +25,7 @@ public class UserService {
     public void save(User user){
         userRepository.save(user);
     }
-    public List<User> findAll(){
-        return (List<User>) userRepository.findAll();
-    }
+
     public void promoteToOrganizer(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -99,5 +97,13 @@ public class UserService {
         user.setSkills((skills != null) ? new HashSet<>(skills) : new HashSet<>());
 
         userRepository.save(user);
+    }
+
+    public List<User> getVolunteers(){
+        return userRepository.getVolunteers();
+    }
+
+    public List<User> findAll(){
+        return userRepository.findAll();
     }
 }
